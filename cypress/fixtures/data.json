@@ -1,0 +1,14 @@
+{
+  "validGuest": {
+    "firstname": "Michael",
+    "lastname": "Romero",
+    "email": "helloworld@gmail.com",
+    "phone": "62188199012"
+  },
+  "invalidGuest": {
+    "firstname": "123",
+    "lastname": "456",
+    "email": "4@a",
+    "phone": "abcdfghijkmnlpw"
+  }
+}
