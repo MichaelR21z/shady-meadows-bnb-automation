@@ -15,16 +15,16 @@ Cypress.Commands.add('loginAPI', (username = Cypress.env('adminUsername'), passw
 
     cy.setCookie('token', response.body.token)
   })
-}
-)
+})
 
 Cypress.Commands.add('loginUI', (username, password) => {
-    cy.visit('/')
+  cy.visit('/')
+
 
   cy.get('#navbarNav > .navbar-nav > li').last().click()
   cy.get('form').within(() => {
-      cy.get('input[type="text"]').type(username)
-      cy.get('input[type="password"]').type(password)
-      cy.get('button[type="submit"]').click()
-    })
+    cy.get('input[type="text"]').type(username)
+    cy.get('input[type="password"]').type(password)
+    cy.get('button[type="submit"]').click()
+  })
 })
