@@ -4,7 +4,7 @@ describe('Administrator Authentication', () => {
 
     const invalidUsername = "Michael"
     const invalidPassword = "helloworld123"
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
 
     context('Happy Path', () => {
         it('Should authenticate an administrator using the login API', () => {
@@ -84,6 +84,30 @@ describe('Administrator Authentication', () => {
             cy.get('form').should('be.visible')
         })
 
+        it.only('TC35 - Intentar reutilizar un token después de que la sesión haya expirado', () => {
+
+            //Login
+            cy.loginAPI().then((token) => {
+                cy.log('Token obtenido correctamente: ' + token)
+
+                 // Esperar 5 minutos para que expire el token
+                cy.log('Esperando 5 minutos para que expire el token...')
+                cy.wait(5 * 60 * 1000)
+
+                cy.request({
+                    method: 'GET',
+                    url: `${Cypress.config('baseUrl')}/api/branding`,
+                    headers: {
+                        Cookie: `token=${token}`
+                    },
+                    failOnStatusCode: false
+                }).then((response) => {
+                    cy.log(`Validación después de la expiración: ${response.status}`)
+                    expect(response.status).to.eq(200)
+                })
+            })
+        })
+
         it('Should keep expiring the session at 5 minutes even with continuous activity', { tags: ['@regression', '@slow'] }, () => {
             // Authenticate through the API and open a protected page.
             cy.loginAPI()
@@ -128,7 +152,28 @@ describe('Administrator Authentication', () => {
     })
 
     context('Reports Bugs', () => {
-        // al loguerse mediante el API
+
+        // No es un Bug 
+        it('Should invalidate the token after logout', () => {
+
+            cy.loginAPI().then((response) => {
+
+                const token = response.body.token;
+
+                // Store the token in a cookie to simulate an authenticated session.
+                cy.setCookie('token', token);
+
+                cy.visit('/admin/rooms');
+                cy.contains('Logout').click();
+
+
+                cy.validateToken(token).then((validateResponse) => {
+                    // Verify that the backend rejects the token after logout.
+                    expect(validateResponse.status).to.eq(403);
+                })
+            })
+        })
+
         it('SMB-57: Protected pages remain accessible after logout', () => {
             cy.loginAPI()
             cy.visit('/admin/rooms')
@@ -140,6 +185,7 @@ describe('Administrator Authentication', () => {
 
             // Attempt to access a protected page after logout.
             cy.visit('/admin/report')
+            cy.wait(500)
             cy.url().should('include', '/admin/report')
         })
 

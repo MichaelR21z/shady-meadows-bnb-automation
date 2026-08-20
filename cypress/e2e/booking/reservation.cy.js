@@ -1,7 +1,7 @@
-import { HomePage } from '../support/pages/HomePage'
-import { createRandomBookingDates } from '../support/utils/dateUtils'
-import { verifyAvailabilityConsistency } from '../support/utils/availabilityUtils'
-import { findAvailableDateRange } from '../support/utils/bookingUtils'
+import { HomePage } from '../../support/pages/HomePage'
+import { createRandomBookingDates } from '../../support/utils/dateUtils'
+import { verifyAvailabilityConsistency } from '../../support/utils/availabilityUtils'
+import { findAvailableDateRange } from '../../support/utils/bookingUtils'
 
 // Este archivo contiene las pruebas end-to-end de reservas del hotel.
 // El objetivo es validar que el flujo completo funciona desde la interfaz
