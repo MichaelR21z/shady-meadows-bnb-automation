@@ -1,0 +1,40 @@
+# TC45 - Responsive navigation on mobile and tablet
+# Related defect: SMB-122
+# Hamburger menu remains open after navigation and overlaps page content.
+
+appId: com.apple.mobilesafari
+
+---
+- launchApp
+
+- openLink: https://automationintesting.online/
+
+- assertVisible: "navigation"
+
+# Verify that the homepage is loaded.
+- assertVisible: "Shady Meadows B&B"
+
+# Open the hamburger menu.
+# iPhone 17
+- tapOn:
+    point: 83%,8%
+# iPad Pro 11-inch (M5)
+- tapOn:
+    point: 85%,8%
+
+# Verify that navigation options are displayed.
+- assertVisible: "Rooms"
+- assertVisible: "Booking"
+- assertVisible: "Amenities"
+- assertVisible: "Location"
+- assertVisible: "Contact"
+- assertVisible: "Admin"
+
+# Navigate to Rooms.
+- tapOn: "Rooms"
+
+# Verify that the navigation reaches the Rooms section.
+- assertVisible: "Comfortable beds and delightful breakfast from locally sourced ingredients"
+
+# Verify that the hamburger menu is closed after navigation.
+- assertNotVisible: "Booking"

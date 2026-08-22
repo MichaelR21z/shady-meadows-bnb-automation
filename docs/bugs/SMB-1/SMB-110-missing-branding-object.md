@@ -135,104 +135,21 @@ Las evidencias siguientes corresponden al defecto **SMB-110 — La homepage fall
 | ----- | ------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
 | **1** | Vídeo   | Ejecución del test en Cypress eliminando completamente el objeto `map` de la respuesta de `GET /api/branding`. La modificación provoca un error de ejecución y la homepage muestra la pantalla de error. | [Ver vídeo en Google Drive](https://drive.google.com/file/d/1iM10e4F4l-iWh69_0VtU9zc1I5kaW0mV/view)                |
 | **2** | Vídeo   | Ejecución utilizando `"map": {}`. La homepage continúa funcionando cuando el objeto existe pero está vacío, demostrando que el defecto ocurre cuando el objeto completo está ausente.                    | [Ver vídeo en Google Drive](https://drive.google.com/file/d/1zm3CSD1a-AnOroQ5H4M0MW7tUGOyDans/view?usp=share_link) |
-| **3** | Captura | Error registrado en la consola: `TypeError: Cannot read properties of undefined`.                                                                                                                        | `[docs/evidence/SMB-1/console-error.png]`                                                                                             |
-| **4** | Captura | Estado de la UI después del fallo, mostrando la pantalla **“This page couldn’t load”**.                                                                                                                  | `[docs/evidence/SMB-1/ui-error.png]`                                                                                             |
-| **5** | Captura | Petición `GET /api/branding` respondiendo con **HTTP 200 OK** a pesar de que la respuesta modificada provoca el fallo de la aplicación.                                                                  | `[docs/evidence/SMB-1/branding-response-200.png]`                                                                                             |
-
-### Evidencia 1 — Objeto `map` ausente
-
-Durante la ejecución automatizada se intercepta la petición:
-
-```http
-GET /api/branding
-```
-
-y se elimina completamente el objeto `map` de la respuesta.
-
-El flujo observado es:
-
-```text
-Homepage
-   ↓
-GET /api/branding
-   ↓
-Respuesta modificada sin el objeto map
-   ↓
-Error de ejecución
-   ↓
-This page couldn’t load
-```
-
-🎥 [Ver ejecución en Google Drive](https://drive.google.com/file/d/1iM10e4F4l-iWh69_0VtU9zc1I5kaW0mV/view)
+| **3** | Captura | Error registrado en la consola: `TypeError: Cannot read properties of undefined`.                                                                                                                        | `[docs/evidence/SMB-1/SMB-10/SMB-110/console-error.png]`                                                                                             |
+| **4** | Captura | Estado de la UI después del fallo, mostrando la pantalla **“This page couldn’t load”**.                                                                                                                  | `[docs/evidence/SMB-1/SMB-10/SMB-110/ui-error.png]`                                                                                             |
+| **5** | Captura | Petición `GET /api/branding` respondiendo con **HTTP 200 OK** a pesar de que la respuesta modificada provoca el fallo de la aplicación.                                                                  | `[docs/evidence/SMB-1/SMB-10/SMB-110/branding-response-200.png]`                                                                                             |
 
 ---
-
-### Evidencia 2 — Objeto `map` vacío
-
-Se realiza una segunda ejecución manteniendo el objeto `map`, pero sin propiedades:
-
-```json
-{
-  "map": {}
-}
-```
-
-En este escenario la homepage continúa funcionando.
-
-Esto permite comprobar que el defecto no se produce simplemente por la ausencia de datos dentro de `map`, sino específicamente cuando **el objeto completo no existe en la respuesta**.
-
-🎥 [Ver ejecución en Google Drive](https://drive.google.com/file/d/1zm3CSD1a-AnOroQ5H4M0MW7tUGOyDans/view?usp=share_link)
-
----
-
-### Evidencia 3 — Console
-
-La consola registra el error:
-
-```text
-TypeError: Cannot read properties of undefined
-```
-
-📷 `[docs/evidence/SMB-1/console-error.png]`
-
----
-
-### Evidencia 4 — UI
-
-Después del error de ejecución, la homepage deja de cargarse correctamente y muestra:
-
-> **This page couldn’t load**
-
-📷 `[docs/evidence/SMB-1/ui-error.png]`
-
----
-
-### Evidencia 5 — Network
-
-La petición:
-
-```http
-GET /api/branding
-```
-
-responde con:
-
-```text
-HTTP 200 OK
-```
-
-aunque la respuesta modificada sin el objeto principal provoca posteriormente el error en el frontend.
-
-📷 `[docs/evidence/SMB-1/branding-response-200.png]`
-
 
 ## Environment
 
-| Campo           | Valor                                |
-| --------------- | ------------------------------------ |
-| **Dispositivo** | Mac                                  |
-| **Browser**     | Electron                             |
-| **URL**         | `https://automationintesting.online` |
-| **Fecha**       | 16 / agosto / 2026                   |
-| **Severidad**   | Crítica                              |
-| **Prioridad**   | Alta                                 |
+| Campo                 | Valor                                 |
+| --------------------- | ------------------------------------- |
+| **Dispositivo**       | Mac                                   |
+| **Sistema operativo** | Tahoe 26.5.2                          |
+| **Browser**           | Electron                              |
+| **Framework**         | Cypress 15.18.0                       |
+| **URL**               | `https://automationintesting.online/` |
+| **Fecha**             | 16 / agosto / 2026                    |
+| **Severidad**         | Critical                              |
+| **Prioridad**         | Medium                                |

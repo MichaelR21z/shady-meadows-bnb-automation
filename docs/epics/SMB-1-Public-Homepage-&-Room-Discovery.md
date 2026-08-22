@@ -172,13 +172,15 @@ SMB-1 proporciona a **SMB-3** la interfaz pública y los puntos de entrada neces
 ### Automatización asociada
 
 ```text
-cypress/e2e/public/homepage/
-├── branding.cy.js
-├── navigation.cy.js
-├── rooms.cy.js
-├── images.cy.js
-└── links.cy.js
-```
+SMB-1
+├── Cypress
+│   └── Web UI / E2E / API ↔ UI
+│
+├── Maestro
+│   └── Mobile / Responsive
+│
+└── Postman
+    └── API
 
 ### Documentación del epic
 
