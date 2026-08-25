@@ -19,7 +19,7 @@ describe('Public Links', () => {
     })
 
     // Related defect: SMB-39 - Social media icons do not redirect to their corresponding platforms
-    it.only('TC56 - Verificar que los enlaces de redes sociales disponen de un destino válido [SMB-39]', () => {
+    it('TC56 - Verificar que los enlaces de redes sociales disponen de un destino válido [SMB-39]', () => {
 
         cy.visit('/')
 
@@ -38,7 +38,7 @@ describe('Public Links', () => {
                 .parent('a')
                 .should('have.attr', 'href')
                 .and('not.be.oneOf', ['', '#'])
-                
+
         })
     })
 })

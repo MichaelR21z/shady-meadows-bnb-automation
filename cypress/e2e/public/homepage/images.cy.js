@@ -111,7 +111,7 @@ describe('Homepage Images', () => {
         })
     })
 
-    it.only('TC54 - Verificar comportamiento de la aplicación cuando una imagen no puede cargarse', () => {
+    it('TC54 - Verificar comportamiento de la aplicación cuando una imagen no puede cargarse', () => {
 
         // Intercept the image request and simulate a 404 Not Found response.        
         cy.intercept('GET', '**/images/rbp-logo.jpg', {

@@ -84,7 +84,7 @@ describe('Administrator Authentication', () => {
             cy.get('form').should('be.visible')
         })
 
-        it.only('TC35 - Intentar reutilizar un token después de que la sesión haya expirado', () => {
+        it('TC35 - Intentar reutilizar un token después de que la sesión haya expirado', () => {
 
             //Login
             cy.loginAPI().then((token) => {
