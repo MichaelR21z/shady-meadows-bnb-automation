@@ -55,7 +55,7 @@ describe('Homepage Navigation', () => {
             cy.get(section.selector).should('be.visible')
 
             // Pause briefly between sections to make the navigation easier to observe during execution.
-            cy.wait(800)
+            // cy.wait(800)
         })
     })
 
