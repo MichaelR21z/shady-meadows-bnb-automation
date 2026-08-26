@@ -41,4 +41,24 @@ describe('Public Links', () => {
 
         })
     })
+
+    it('TC57 - Verificar que los enlaces internos y anchors apuntan a destinos existentes [SMB-119]', () => {
+
+        cy.visit('/')
+
+        const internalLinks = [
+            { name: 'Rooms', href: '/#rooms', target: '#rooms' },
+            { name: 'Booking', href: '/#booking', target: '#booking' },
+            { name: 'Amenities', href: '/#amenities', target: '#amenities' },
+            { name: 'Location', href: '/#location', target: '#location' },
+            { name: 'Contact', href: '/#contact', target: '#contact' }
+        ]
+
+        internalLinks.forEach((link) => {
+
+            cy.get('nav.navbar').contains('a.nav-link', link.name).should('have.attr', 'href', link.href)
+            
+            cy.get(link.target).should('exist')
+        })
+    })
 })
