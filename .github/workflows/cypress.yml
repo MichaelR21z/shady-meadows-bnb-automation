@@ -1,0 +1,27 @@
+name: Cypress Tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  cypress-run:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Run Cypress tests
+        uses: cypress-io/github-action@v7
+        with:
+          browser: chrome
+
+        env:
+          CYPRESS_adminUsername: ${{ secrets.CYPRESS_ADMIN_USERNAME }}
+          CYPRESS_adminPassword: ${{ secrets.CYPRESS_ADMIN_PASSWORD }}

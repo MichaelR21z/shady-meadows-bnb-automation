@@ -1,4 +1,31 @@
 export class HomePage {
+
+    // Public contact form
+    getContactSection() {
+        return cy.get('#contact')
+    }
+
+    fillContactForm(contactData) {
+        cy.get('[data-testid="ContactName"]').type(contactData.name)
+
+        cy.get('[data-testid="ContactEmail"]').type(contactData.email)
+
+        cy.get('[data-testid="ContactPhone"]').type(contactData.phone)
+
+        cy.get('[data-testid="ContactSubject"]').type(contactData.subject)
+
+        cy.get('[data-testid="ContactDescription"]').type(contactData.message)
+    }
+
+    submitContactForm() {
+       cy.get('#contact').contains('button', 'Submit').click()
+    }
+
+    verifyContactSuccessMessage() {
+        cy.get('#contact').should('contain.text', 'Thanks for getting in touch')
+    }
+
+
     // Homepage branding and public hotel information
 
     verifyHotelName() {
@@ -48,7 +75,7 @@ export class HomePage {
     //----------------------------------------------------------------------
 
     // Compare homepage branding with the data returned by the branding API.
-    
+
     verifyBrandingAgainstApi(branding) {
 
         const fullAddress = [
@@ -60,7 +87,7 @@ export class HomePage {
         ].join(', ')    // join lo convierte en Shady Meadows B&B, Shadows valley, Newingtonfordburyshire, Dilbery, N1 1AA
 
         // Name
-        
+
         cy.get('.navbar-brand span').should('be.visible').and('have.text', branding.name)
 
         // Background image
@@ -76,12 +103,12 @@ export class HomePage {
 
         // We can't read the coordinates directly from the DOM
         // Just verify that the map component is rendered
-        
+
         cy.get('#location').scrollIntoView().within(() => {
             cy.get('.pigeon-tiles-box').should('be.visible')
 
             cy.get('.pigeon-overlays').should('exist')
-            
+
         })
 
         // Section Location
