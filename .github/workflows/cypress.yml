@@ -26,3 +26,12 @@ jobs:
         env:
           CYPRESS_adminUsername: ${{ secrets.CYPRESS_ADMIN_USERNAME }}
           CYPRESS_adminPassword: ${{ secrets.CYPRESS_ADMIN_PASSWORD }}
+
+      - name: Upload Mochawesome report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mochawesome-report
+          path: cypress/reports
+          if-no-files-found: ignore
+          retention-days: 2

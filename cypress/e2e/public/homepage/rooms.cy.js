@@ -73,7 +73,7 @@ describe('Homepage Rooms', () => {
     })
 
     // Related defect: SMB-134 - No informational message is displayed when the room catalog is empty.
-    it('TC49 - Verificar comportamiento cuando el catálogo de habitaciones está vacío [SMB-SMB-134]', () => {
+    it('TC49 - Verificar comportamiento cuando el catálogo de habitaciones está vacío [SMB-134]', () => {
 
         cy.intercept('GET', '/api/room', {
             statusCode: 200,

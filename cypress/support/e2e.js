@@ -1,5 +1,6 @@
 // Import commands.js using ES2015 syntax:
 import './commands'
+import 'cypress-mochawesome-reporter/register'
 
 // Ignore the known React issue to avoid unrelated test failures.
 Cypress.on('uncaught:exception', (err) => {
