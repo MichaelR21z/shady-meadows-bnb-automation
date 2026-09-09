@@ -1,770 +1,507 @@
-# 🧪 Portafolio QA — Shady Meadows B&B Testing
+<div align="center">
 
-> Proyecto de QA funcional, API, E2E y mobile construido sobre [automationintesting.online](https://automationintesting.online/) como entorno público de práctica para simular un proceso de calidad de software de principio a fin.
+# 🏨 Shady Meadows B&B — QA Portfolio
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Cypress-E2E-17202C?logo=cypress&logoColor=white" alt="Cypress"/>
-  <img src="https://img.shields.io/badge/Postman-API-FF6C37?logo=postman&logoColor=white" alt="Postman"/>
-  <img src="https://img.shields.io/badge/Newman-API%20Runner-FF6C37?logo=postman&logoColor=white" alt="Newman"/>
-  <img src="https://img.shields.io/badge/Maestro-Mobile-000000" alt="Maestro"/>
-  <img src="https://img.shields.io/badge/Jira-Test%20Management-0052CC?logo=jira&logoColor=white" alt="Jira"/>
-  <img src="https://img.shields.io/badge/GitHub-Version%20Control-181717?logo=github&logoColor=white" alt="GitHub"/>
-  <img src="https://img.shields.io/badge/JavaScript-Automation-F7DF1E?logo=javascript&logoColor=000000" alt="JavaScript"/>
-</p>
+### Manual Testing · API Testing · Cypress · Maestro · CI
+
+Proyecto práctico de Quality Assurance desarrollado sobre  
+**Restful-booker-platform / Shady Meadows B&B**
+
+`https://automationintesting.online/`
+
+</div>
 
 ---
 
-## 📌 Sobre este proyecto
+## 👋 Sobre el proyecto
 
-Este repositorio documenta un proceso de QA aplicado sobre una aplicación real de reservas de hotel. El objetivo no es únicamente almacenar scripts de automatización, sino mostrar cómo se aborda la calidad desde una perspectiva completa:
+Este repositorio forma parte de mi portfolio de **Quality Assurance**.
 
-- análisis funcional;
-- diseño de Test Cases;
-- pruebas positivas, negativas y edge cases;
-- testing de APIs;
-- automatización E2E web;
-- automatización responsive/mobile;
-- validaciones API ↔ UI;
-- inyección controlada de errores;
-- reporte y trazabilidad de bugs;
-- investigación de causa raíz;
-- evidencias de ejecución;
-- organización mantenible del repositorio.
-
-El flujo de trabajo busca representar un proceso similar al de un equipo real:
+El objetivo es aplicar un proceso QA completo sobre una aplicación web real:
 
 ```mermaid
 flowchart LR
-    A[Requisitos / User Stories] --> B[Criterios de aceptación]
-    B --> C[Diseño de Test Cases]
-    C --> D[Pruebas manuales]
-    D --> E{Resultado}
-    E -->|Passed| F[Regresión]
-    E -->|Failed| G[Bug report]
-    G --> H[Investigación]
-    H --> I[Automatización de regresión]
-    F --> I
-    I --> J[Cypress / Postman / Maestro]
-    J --> K[Repositorio + Evidencias]
+    A[Analizar] --> B[Diseñar pruebas]
+    B --> C[Ejecutar]
+    C --> D{Resultado}
+    D -->|Passed| E[Regresión]
+    D -->|Failed| F[Bug]
+    F --> G[Evidencia]
+    E --> H[Automatización]
+    G --> H
 ```
 
----
+El proyecto combina pruebas manuales y automatizadas para validar la aplicación desde diferentes niveles.
 
-## 🎯 Objetivos del portfolio
-
-Este proyecto busca demostrar experiencia práctica en:
-
-| Área | Aplicación en el proyecto |
-|---|---|
-| QA Manual | Diseño, ejecución y documentación de Test Cases |
-| E2E Web | Cypress |
-| API Testing | Postman / Newman |
-| Mobile / Responsive | Maestro + simuladores iOS |
-| API ↔ UI | Comparaciones dinámicas usando respuestas reales del backend |
-| Negative Testing | `cy.intercept()`, estados vacíos, datos incompletos, HTTP errors |
-| Bug Reporting | Jira + documentación Markdown |
-| Root Cause Analysis | Investigación de disponibilidad, sesión, errores de backend |
-| Test Design | Partición de equivalencia, valores límite, transición de estados, checklist |
-| Arquitectura | POM, Custom Commands, helpers y separación por responsabilidad |
-| Versionado | Git / GitHub |
+| Área | Uso |
+| --- | --- |
+| 🌐 UI Testing | Navegación, formularios, habitaciones y comportamiento visual |
+| 🔄 E2E | Flujos completos desde la interfaz |
+| 🔌 API Testing | Status codes, responses, datos y persistencia |
+| ❌ Negative Testing | Errores, datos inválidos y comportamientos inesperados |
+| 📐 Boundary Testing | Valores mínimos y máximos |
+| 📱 Mobile / Responsive | Validaciones sobre diferentes dispositivos |
+| 🤖 Automation | Regresión automatizada con Cypress y Maestro |
+| 📋 Bug Reporting | Defectos documentados con evidencias |
+| ⚙️ CI | Ejecución automática mediante GitHub Actions |
 
 ---
 
-# 🧭 Cobertura funcional
+# 🛠️ Herramientas
 
-Actualmente el proyecto está organizado por Epics y User Stories.
+### Cypress
 
-```mermaid
-flowchart TD
-    ROOT[Shady Meadows B&B QA]
+Herramienta principal de automatización web.
 
-    ROOT --> E1[SMB-1<br/>Public Homepage & Room Discovery]
-    ROOT --> E3[SMB-3<br/>Booking Management]
-    ROOT --> E4[SMB-4<br/>Admin Authentication]
+Se utiliza para:
 
-    E1 --> S10[SMB-10<br/>Hotel Information]
-    E1 --> S11[SMB-11<br/>Public Navigation]
-    E1 --> S13[SMB-13<br/>Rooms]
-    E1 --> S35[SMB-35<br/>Broken Images]
-    E1 --> S36[SMB-36<br/>Broken Links]
+- pruebas funcionales;
+- E2E;
+- formularios;
+- navegación;
+- interceptación de requests;
+- simulación de errores;
+- validaciones UI ↔ API;
+- consultas con `cy.request()`;
+- pruebas negativas y de límites.
 
-    E3 --> S17[SMB-17<br/>Reservation]
-    E3 --> S18[SMB-18<br/>Booking Validation]
-    E3 --> S19[SMB-19<br/>Availability]
-    E3 --> S71[SMB-71<br/>Booking Error Handling]
-
-    E4 --> S20[SMB-20<br/>Successful Login]
-    E4 --> S21[SMB-21<br/>Invalid Login]
-    E4 --> S22[SMB-22<br/>Logout]
-    E4 --> S67[SMB-67<br/>Session Expiry]
-```
-
-> La disponibilidad por fechas pertenece a **SMB-19 / SMB-3**. Se eliminó la duplicidad que existía con SMB-101 en SMB-1.
+La automatización utiliza **Page Objects**, utilidades reutilizables y datos dinámicos.
 
 ---
 
-# 🏠 SMB-1 — Public Homepage & Room Discovery
+### Maestro
 
-La homepage se valida desde varias perspectivas: contenido, navegación, habitaciones, imágenes, enlaces y responsive.
-
-| User Story | Test Cases | Automatización principal |
-|---|---|---|
-| **SMB-10 — Información pública del hotel** | TC37–TC41 | Cypress / Postman |
-| **SMB-11 — Navegación pública** | TC42–TC46 | Cypress / Maestro |
-| **SMB-13 — Información de habitaciones** | TC47–TC51 | Cypress |
-| **SMB-35 — Imágenes públicas** | TC52–TC55 | Cypress / Maestro |
-| **SMB-36 — Enlaces públicos** | TC56–TC57 | Cypress |
-
-### Estado actual de SMB-1
-
-| TC | Objetivo | Estado / Herramienta |
-|---|---|---|
-| TC37 | Información pública visible | ✅ Cypress |
-| TC38 | `/api/branding` ↔ UI | ✅ Cypress |
-| TC39 | Branding sin autenticación | ✅ Postman |
-| TC40 | Estructura de `/api/branding` | ✅ Postman |
-| TC41 | Branding incompleto | ✅ Cypress — reproduce bug |
-| TC42 | Navegación header | ✅ Cypress |
-| TC43 | Visibilidad tras navegación | 🟡 Cypress + validación visual |
-| TC44 | Ruta inexistente | ✅ Cypress |
-| TC45 | Responsive navigation | ✅ Maestro |
-| TC46 | Footer Quick Links | ✅ Cypress |
-| TC47 | Catálogo de habitaciones | ✅ Cypress |
-| TC48 | `/api/room` ↔ UI | ✅ Cypress |
-| TC49 | Catálogo vacío | ✅ Cypress |
-| TC50 | Información incompleta | ✅ Cypress |
-| TC51 | Acceso al flujo de reserva | ✅ Cypress |
-| TC52 | Imágenes públicas visibles | ✅ Cypress |
-| TC53 | HTTP de recursos de imagen | ✅ Cypress |
-| TC54 | Imagen 404 | ✅ Cypress |
-| TC55 | Responsive images | 🟡 Maestro + revisión visual |
-| TC56 | Destinos válidos | ✅ Cypress — reproduce bugs |
-| TC57 | Anchors internos existentes | ⏳ Pendiente |
-
----
-
-# 🏗️ Arquitectura del repositorio
+Utilizado para escenarios mobile y responsive, principalmente sobre simuladores iOS.
 
 ```text
-Shady-Meadows-b&b/
+maestro/
+└── flows/
+```
+
+Permite complementar Cypress cuando el comportamiento depende especialmente del dispositivo o del viewport.
+
+---
+
+### Postman
+
+Postman se utiliza como herramienta de apoyo durante las pruebas API.
+
+Actualmente se usa para:
+
+- ejecutar requests;
+- validar status codes;
+- inspeccionar responses;
+- comprobar estructuras;
+- verificar persistencia;
+- investigar defectos;
+- generar evidencias API.
+
+> La colección Postman versionada y su posterior ejecución con Newman forman parte de próximas entregas del proyecto.
+
+---
+
+### Jira
+
+Utilizado para organizar User Stories, Test Cases, resultados y defectos.
+
+La documentación principal también se mantiene dentro del repositorio para que el proyecto pueda entenderse sin acceso externo a Jira.
+
+---
+
+### GitHub Actions
+
+GitHub Actions ejecuta automáticamente la suite Cypress configurada para CI después de cambios en el repositorio.
+
+Actualmente el workflow está enfocado en:
+
+```text
+cypress/e2e/public/homepage/
+```
+
+```mermaid
+flowchart LR
+    A[Push / Pull Request] --> B[GitHub Actions]
+    B --> C[Cypress]
+    C --> D[Public Homepage Tests]
+    D --> E[Mochawesome]
+    E --> F[HTML Report]
+```
+
+Las áreas Booking y Admin se incorporarán progresivamente a CI a medida que avance su cobertura.
+
+---
+
+### Mochawesome
+
+Cada ejecución Cypress genera un reporte HTML visual con:
+
+- tests ejecutados;
+- Passed / Failed;
+- duración;
+- suites;
+- errores;
+- screenshots asociados a fallos.
+
+En GitHub Actions el reporte se guarda como un **artifact temporal durante 2 días**.
+
+No se almacena permanentemente dentro del repositorio.
+
+---
+
+# 📂 Estructura principal
+
+```text
+ShadyMeadowsB&B/
 │
 ├── cypress/
 │   ├── e2e/
 │   │   ├── public/
 │   │   │   └── homepage/
-│   │   │       ├── branding.cy.js
-│   │   │       ├── navigation.cy.js
-│   │   │       ├── rooms.cy.js
-│   │   │       ├── images.cy.js
-│   │   │       └── links.cy.js
-│   │   │
 │   │   ├── booking/
-│   │   │   ├── availability.cy.js
-│   │   │   └── reservation.cy.js
-│   │   │
 │   │   └── admin/
-│   │       ├── authentication.cy.js
-│   │       ├── session.cy.js
-│   │       ├── rooms.cy.js
-│   │       └── reports.cy.js
 │   │
-│   ├── fixtures/
+│   ├── support/
+│   │   ├── pages/
+│   │   ├── utils/
+│   │   ├── commands.js
+│   │   └── e2e.js
 │   │
-│   ├── screenshots/
-│   │
-│   ├── videos/
-│   │
-│   └── support/
-│       ├── pages/
-│       │   └── HomePage.js
-│       ├── utils/
-│       ├── commands.js
-│       └── e2e.js
+│   └── fixtures/
+│
+├── maestro/
+│   └── flows/
 │
 ├── docs/
-│   ├── epics/
 │   ├── test-cases/
-│   │   ├── SMB-1/
-│   │   ├── SMB-3/
-│   │   └── SMB-4/
 │   ├── bugs/
-│   ├── case-studies/
-│   └── traceability-matrix.md
+│   ├── evidence/
+│   └── test-strategy.md
 │
-├── evidence/
+├── .github/
+│   └── workflows/
+│       └── cypress.yml
 │
-├── postman/
-│   ├── collections/
-│   └── environments/
-│
-├── flows/
-│   └── navigation-responsive.yaml
-│
+├── cypress.env.example.json
 ├── cypress.config.js
-├── cypress.env.json
 ├── package.json
-├── package-lock.json
-├── .gitignore
 └── README.md
 ```
 
+### ¿Qué contiene cada parte?
+
+| Ruta | Contenido |
+| --- | --- |
+| `cypress/e2e/` | Tests automatizados organizados por área funcional |
+| `cypress/support/pages/` | Page Objects |
+| `cypress/support/utils/` | Funciones reutilizables |
+| `maestro/flows/` | Flujos mobile y responsive |
+| `docs/test-cases/` | Diseño y resultados de pruebas |
+| `docs/bugs/` | Defectos encontrados |
+| `docs/evidence/` | Evidencias asociadas a los bugs |
+| `docs/test-strategy.md` | Estrategia general de testing |
+| `.github/workflows/` | Integración continua |
+
 ---
 
-# 🧩 Estrategia de automatización
+# 🧩 Cobertura funcional
 
-La herramienta se selecciona según el tipo de riesgo que se quiere cubrir.
+El proyecto se desarrolla progresivamente por áreas identificadas mediante `SMB-*`.
 
-```mermaid
-flowchart LR
-    T[Test Case] --> Q{¿Qué se quiere validar?}
+| Área | Funcionalidad | Estado |
+| --- | --- | --- |
+| **SMB-1** | 🌐 Homepage pública y habitaciones | ✅ Desarrollado |
+| **SMB-2** | ✉️ Formulario de contacto | ✅ Desarrollado |
+| **SMB-3** | 📅 Disponibilidad y reservas | 🚧 En curso |
+| **SMB-4** | 🔐 Autenticación administrativa | ⏳ Próxima entrega |
+| **SMB-8** | 📊 Reports / ocupación | ⏳ Próxima entrega |
 
-    Q -->|UI / E2E / API-UI| C[Cypress]
-    Q -->|API / contrato / recursos| P[Postman + Newman]
-    Q -->|Mobile / Responsive| M[Maestro]
-    Q -->|Composición visual compleja| V[Validación visual]
+### SMB-1
 
-    C --> R[Regresión web]
-    P --> A[Regresión API]
-    M --> MO[Regresión mobile]
-```
+Validación de la experiencia pública:
 
-### Cypress
-
-Se utiliza para:
-
-- flujos E2E;
-- validaciones API ↔ UI;
 - navegación;
-- componentes públicos;
-- estados vacíos;
-- datos incompletos;
-- errores simulados;
-- comprobación de recursos;
-- regresión de bugs.
-
-Ejemplos destacados:
-
-```javascript
-cy.request('GET', '/api/branding')
-cy.request('GET', '/api/room')
-cy.intercept('GET', '/api/room', ...)
-cy.location('pathname')
-cy.get(...).within(...)
-```
-
-### Postman / Newman
-
-Se utiliza cuando el objetivo es principalmente API:
-
-- endpoints públicos;
-- autenticación;
-- estructura de respuestas;
-- tipos de datos;
-- status codes;
-- Content-Type;
-- recursos HTTP.
-
-### Maestro
-
-Se utiliza para validar comportamiento responsive/mobile en simuladores Apple.
-
-Dispositivos usados:
-
-- iPhone 17 — iOS 26.5
-- iPad Pro 11-inch (M5) — iOS 26.5
-
----
-
-# 🧱 Page Object Model y Custom Commands
-
-El proyecto utiliza POM de forma selectiva.
-
-```mermaid
-flowchart TD
-    SPEC[Spec .cy.js]
-    POM[Page Object]
-    CMD[Custom Commands]
-    API[Backend API]
-    UI[Application UI]
-
-    SPEC --> POM
-    SPEC --> CMD
-    SPEC --> API
-
-    POM --> UI
-    CMD --> API
-```
-
-### Filosofía
-
-```text
-Page Objects
-→ selectores UI
-→ acciones
-→ validaciones reutilizables
-
-Custom Commands
-→ autenticación
-→ login API
-→ preparación común
-
-Fixtures / Utils
-→ datos o transformaciones reutilizables
-
-Specs
-→ intención del Test Case
-→ flujo
-→ assertions
-```
-
-No se fuerza POM cuando añadir una abstracción no mejora legibilidad o mantenimiento.
-
----
-
-# 🔄 API como fuente de verdad
-
-Uno de los principios del proyecto es evitar hardcodear datos dinámicos.
-
-Ejemplo conceptual:
-
-```mermaid
-sequenceDiagram
-    participant Test as Cypress
-    participant API as GET /api/room
-    participant UI as Homepage
-
-    Test->>API: Solicitar habitaciones actuales
-    API-->>Test: rooms[]
-    Test->>UI: Abrir homepage
-    Test->>UI: Localizar room cards
-    Test->>Test: Comparar API ↔ UI
-```
-
-Esto permite que los tests sigan siendo válidos aunque cambien:
-
+- información del hotel;
 - habitaciones;
-- precios;
 - imágenes;
-- características;
-- contenido de branding.
+- enlaces;
+- responsive.
+
+**Herramientas:** Cypress + Maestro
+
+### SMB-2
+
+Validación del formulario de contacto:
+
+- envío;
+- persistencia;
+- campos obligatorios;
+- formatos inválidos;
+- valores límite;
+- manejo de errores;
+- feedback al usuario.
+
+**Herramienta principal:** Cypress
+
+### SMB-3
+
+Cobertura relacionada con:
+
+- disponibilidad;
+- fechas;
+- reservas;
+- validaciones;
+- integración UI ↔ API.
+
+🚧 **En curso**
+
+### SMB-4
+
+Cobertura administrativa relacionada con:
+
+- login;
+- sesiones;
+- logout;
+- credenciales;
+- tokens;
+- rutas protegidas.
+
+⏳ **Próxima entrega**
 
 ---
 
-# 🧪 Negative Testing y Robustez
+# 🔐 Variables de entorno
 
-La suite no se limita al happy path.
+Las credenciales y otros datos sensibles no se almacenan directamente en los tests.
 
-Se simulan escenarios controlados mediante `cy.intercept()`:
-
-```mermaid
-flowchart LR
-    A[Backend normal] --> B[cy.intercept]
-    B --> C{Escenario}
-    C --> D[rooms: []]
-    C --> E[branding sin map]
-    C --> F[imagen 404]
-    C --> G[datos incompletos]
-    D --> H[Validar estado vacío]
-    E --> I[Validar robustez]
-    F --> J[Validar continuidad UI]
-    G --> K[Validar tolerancia a datos faltantes]
-```
-
-Ejemplos:
-
-```javascript
-cy.intercept('GET', '/api/room', {
-    statusCode: 200,
-    body: {
-        rooms: []
-    }
-})
-```
-
-```javascript
-cy.intercept('GET', '**/images/room1.jpg', {
-    statusCode: 404,
-    body: 'Not Found'
-})
-```
-
-El objetivo es conseguir escenarios:
-
-- deterministas;
-- repetibles;
-- independientes del estado temporal del entorno compartido.
-
----
-
-# 🖼️ Validación de imágenes
-
-La validación incluye:
-
-1. imágenes visibles;
-2. imágenes propias de la aplicación;
-3. `background-image`;
-4. recursos obtenidos desde APIs;
-5. HTTP status;
-6. `Content-Type`;
-7. imágenes rotas;
-8. responsive.
-
-Para evitar falsos positivos se excluyen recursos externos como tiles del mapa cuando no forman parte del objetivo del Test Case.
-
-Ejemplo:
-
-```javascript
-cy.get('img[src^="/images/"]')
-```
-
-Y para comprobar que la imagen cargó realmente:
-
-```javascript
-expect($element[0].naturalWidth)
-    .to.be.greaterThan(0)
-```
-
----
-
-# 🔗 Validación de enlaces
-
-SMB-36 comprueba dos riesgos diferentes.
-
-```mermaid
-flowchart TD
-    A[Elemento navegable] --> B{¿Tiene destino funcional?}
-    B -->|No| C[TC56 FAIL]
-    B -->|Sí| D{¿El anchor existe?}
-    D -->|No| E[TC57 FAIL]
-    D -->|Sí| F[Destino interno válido]
-```
-
-### TC56
-
-Detecta elementos como:
-
-```html
-<a href="#">Rooms</a>
-```
-
-### TC57
-
-Detecta casos como:
-
-```html
-<a href="/#amenities">Amenities</a>
-```
-
-cuando no existe:
-
-```html
-id="amenities"
-```
-
----
-
-# 🐞 Bugs destacados encontrados
-
-El proyecto incluye defectos descubiertos mediante pruebas manuales, Cypress, Postman y Maestro.
-
-| ID | Hallazgo | Tipo |
-|---|---|---|
-| **SMB-110** | La homepage falla cuando falta un objeto principal de `/api/branding` | Robustez / Frontend |
-| **SMB-119** | Amenities apunta a un anchor inexistente | Navegación |
-| **SMB-120** | Booking queda parcialmente oculto por navbar sticky | UI / UX |
-| **SMB-121** | Página 404 sin opciones claras de recuperación | UX / Routing |
-| **SMB-122** | Menú hamburguesa permanece abierto y tapa contenido | Responsive |
-| **SMB-123** | Mapa Location no se adapta correctamente en responsive | Responsive |
-| **SMB-125** | Quick Links del footer usan destinos no funcionales | Navegación |
-| **SMB-39** | Iconos sociales no redirigen a sus plataformas | Navegación |
-| **SMB-38** | Pantalla de error al reservar con fechas inválidas | Booking |
-| **SMB-46** | Reserva creada con datos inválidos | Validación |
-| **SMB-53** | Fechas inválidas generan importe negativo | Booking / Edge Case |
-| **SMB-72** | Check Availability muestra habitaciones ya reservadas | Disponibilidad |
-| **SMB-73** | Error ante HTTP 409 Conflict en reserva | Error Handling |
-
-> Los IDs se mantienen para conservar trazabilidad con Jira.
-
----
-
-# 🔍 Ejemplos de trazabilidad
-
-```mermaid
-flowchart LR
-    US[SMB-13] --> TC[TC49]
-    TC --> AUTO[rooms.cy.js]
-    TC --> BUG[SMB-134]
-    BUG --> EVID[Evidencia]
-```
-
-Otro ejemplo:
+Para desarrollo local se utiliza:
 
 ```text
-User Story
-SMB-36
-
-↓
-Test Case
-TC56
-
-↓
-Automatización
-links.cy.js
-
-↓
-Defectos reproducidos
-SMB-125
-SMB-39
-```
-
----
-
-# 📱 Evidencias mobile
-
-Las ejecuciones de Maestro se documentan por:
-
-- Test Case;
-- dispositivo;
-- flow;
-- resultado;
-- bug relacionado;
-- vídeo/evidencia.
-
-Ejemplo:
-
-```text
-TC45
-→ navigation-responsive.yaml
-→ iPhone 17 / iPad Pro 11"
-→ Failed
-→ SMB-122
-→ evidencia en vídeo
-```
-
-Los vídeos se enlazan externamente para evitar aumentar innecesariamente el tamaño del repositorio.
-
----
-
-# 📚 Convenciones de documentación
-
-- Documentación y explicaciones: **español**.
-- Código, variables y comentarios: **inglés**.
-- Los títulos de `it()` pueden mantenerse en español por trazabilidad.
-- Resultado satisfactorio: **Passed**.
-- Si un Test Case reproduce un bug conocido: **Failed**.
-- No se ocultan defectos para conseguir una suite artificialmente verde.
-- Los Test Cases deben evitar valores hardcodeados cuando los datos son dinámicos.
-- Jira es la fuente de gestión de bugs; Markdown permite mostrar el trabajo dentro del portfolio.
-
----
-
-# 🔐 Seguridad y configuración local
-
-Los secretos no deben subirse al repositorio.
-
-Ejemplo:
-
-```gitignore
-node_modules/
 cypress.env.json
-.env
-cypress/screenshots/
-cypress/videos/
-.DS_Store
 ```
 
-`cypress.env.json` puede contener localmente:
+Este archivo está incluido en `.gitignore`.
+
+El repositorio contiene únicamente:
+
+```text
+cypress.env.example.json
+```
+
+con valores de ejemplo:
 
 ```json
 {
-  "adminUsername": "",
-  "adminPassword": ""
+  "adminUsername": "your-username",
+  "adminPassword": "your-password"
 }
 ```
 
-Nunca deben publicarse credenciales reales, tokens o cookies de sesión.
+Los tests acceden a estas variables mediante:
+
+```javascript
+Cypress.env('adminUsername')
+Cypress.env('adminPassword')
+```
+
+En GitHub Actions los valores reales se almacenan mediante **Repository Secrets**.
+
+```mermaid
+flowchart TD
+    A[Local] --> B[cypress.env.json]
+    B --> D[Cypress.env]
+
+    E[GitHub Actions] --> F[Repository Secrets]
+    F --> D
+```
 
 ---
 
-# ▶️ Cómo ejecutar el proyecto
+# 🚀 Instalación
 
-## Instalar dependencias
+## 1. Clonar el repositorio
+
+```bash
+git clone <repository-url>
+cd ShadyMeadowsB&B
+```
+
+## 2. Instalar dependencias
 
 ```bash
 npm install
 ```
 
-## Cypress — modo interactivo
+## 3. Configurar variables locales
 
-```bash
-npx cypress open
+Crea:
+
+```text
+cypress.env.json
 ```
 
-## Cypress — headless
+tomando como referencia:
 
-```bash
-npx cypress run
-```
-
-## Ejecutar únicamente Homepage
-
-```bash
-npx cypress run --spec "cypress/e2e/public/homepage/**/*.cy.js"
-```
-
-## Postman / Newman
-
-Ejemplo:
-
-```bash
-newman run postman/collections/automationintesting.postman_collection.json
-```
-
-Si se utiliza un environment:
-
-```bash
-newman run postman/collections/automationintesting.postman_collection.json \
-  -e postman/environments/automationintesting.postman_environment.json
-```
-
-## Maestro
-
-Ejecutar un flow:
-
-```bash
-maestro test flows/navigation-responsive.yaml
-```
-
-Ver simuladores activos:
-
-```bash
-xcrun simctl list devices | grep Booted
+```text
+cypress.env.example.json
 ```
 
 ---
 
-# 🧾 Case Studies
+# 🧪 Ejecutar las pruebas
 
-El portfolio puede incluir investigaciones más profundas además de Test Cases individuales.
+### Toda la suite Cypress
 
-### Disponibilidad y conflictos de reserva
+```bash
+npm test
+```
 
-Análisis de:
+### Solo Public / Homepage
 
-- disponibilidad real;
-- habitaciones solapadas;
-- HTTP 409;
-- diferencias entre validación frontend y backend;
-- reproducción determinista mediante automatización.
+```bash
+npm run test:public
+```
 
-### Sesión y autenticación de administrador
-
-Investigación para distinguir:
-
-- bug real;
-- comportamiento esperado;
-- diferencia causada por configuración de pruebas.
-
-Se analizaron:
-
-- login UI;
-- login API;
-- cookies;
-- token;
-- expiración;
-- `/api/auth/validate`;
-- endpoints protegidos;
-- logout.
+Este segundo comando es útil mientras se trabaja sobre la cobertura pública actual.
 
 ---
 
-# 📊 Estado del proyecto
+# 📊 Reportes Mochawesome
 
-### SMB-1
+Al ejecutar Cypress se genera automáticamente:
 
 ```text
-21 Test Cases diseñados
-20 ejecutados / automatizados o con cobertura parcial
-1 pendiente: TC57
+cypress/reports/html/index.html
 ```
 
-### Estado por herramienta
+Para abrir el último reporte en macOS:
+
+```bash
+npm run report:open
+```
+
+Antes de una nueva ejecución se eliminan:
 
 ```text
+cypress/reports/
+cypress/screenshots/
+```
+
+Por lo tanto, localmente se conserva únicamente la información correspondiente a la ejecución más reciente.
+
+```mermaid
+flowchart LR
+    A[npm test] --> B[Limpiar reporte anterior]
+    B --> C[Ejecutar Cypress]
+    C --> D[Mochawesome]
+    D --> E[index.html]
+```
+
+Los reportes y screenshots están incluidos en `.gitignore`, por lo que **no se versionan**.
+
+---
+
+# ⚙️ Continuous Integration
+
+El workflow:
+
+```text
+.github/workflows/cypress.yml
+```
+
+ejecuta Cypress automáticamente mediante GitHub Actions.
+
+Actualmente:
+
+```text
+Push / Pull Request
+        ↓
+GitHub Actions
+        ↓
+Public Homepage
+        ↓
 Cypress
-→ E2E Web
-→ API ↔ UI
-→ Negative testing
-→ Regression
-
-Postman / Newman
-→ API
-→ Contract / Structure
-→ Authentication
-→ HTTP Resources
-
-Maestro
-→ Mobile
-→ Responsive
-→ iPhone / iPad
+        ↓
+Mochawesome
+        ↓
+HTML Artifact
+        ↓
+Eliminación automática después de 2 días
 ```
 
-> Estas cifras corresponden al estado actual documentado del proyecto y se actualizarán a medida que continúe la cobertura.
+Esto permite detectar regresiones y revisar los resultados de las ejecuciones sin almacenar reportes permanentemente en el repositorio.
 
 ---
 
-# 🚧 Próximos pasos
+# 📝 Documentación QA
 
-- [ ] Completar **TC57 — anchors internos**.
-- [ ] Revisar `links.cy.js`.
-- [ ] Revisar todos los specs de SMB-1.
-- [ ] Consolidar documentación ↔ código ↔ bugs ↔ evidencias.
-- [ ] Completar matriz de trazabilidad.
-- [ ] Revisar `.gitignore`.
-- [ ] Añadir/ajustar ejecución automatizada con Newman.
-- [ ] Consolidar CI/CD cuando la pipeline esté implementada en el repositorio.
-- [ ] Publicar reportes de ejecución cuando estén disponibles.
-- [ ] Continuar ampliando cobertura de Epics restantes.
-
----
-
-# 💡 Principios aplicados
+La documentación está separada del código de automatización:
 
 ```text
-No hardcodear datos dinámicos
-      ↓
-Usar API como fuente de verdad
-      ↓
-Separar responsabilidades
-      ↓
-Mantener tests simples
-      ↓
-Automatizar escenarios de alto valor
-      ↓
-Reproducir bugs de forma determinista
-      ↓
-No esconder fallos conocidos
-      ↓
-Mantener trazabilidad completa
+docs/
+├── test-cases/
+├── bugs/
+├── evidence/
+└── test-strategy.md
+```
+
+La relación general es:
+
+```mermaid
+flowchart LR
+    A[Requisito] --> B[Test Case]
+    B --> C[Resultado]
+    C -->|Failed| D[Bug]
+    D --> E[Evidencia]
+    B --> F[Automation]
+```
+
+`test-strategy.md` describe el enfoque general utilizado para decidir **qué probar, cómo probarlo y qué automatizar**.
+
+---
+
+# 🚧 Estado del proyecto
+
+> **Proyecto en curso**
+>
+> La cobertura se amplía progresivamente a nuevas funcionalidades de la aplicación.
+
+Próximas entregas incluyen:
+
+- ampliación de Booking;
+- autenticación y funcionalidades administrativas;
+- incorporación progresiva de nuevas suites a CI;
+- colección Postman versionada;
+- Newman;
+- ampliación de regresión automatizada.
+
+```mermaid
+flowchart LR
+    A[SMB-1 ✅] --> B[SMB-2 ✅]
+    B --> C[SMB-3 🚧]
+    C --> D[Admin]
+    D --> E[Postman / Newman]
+    E --> F[Regression Suite]
 ```
 
 ---
 
-# 👨‍💻 Autor
+# 👨‍💻 Contacto
 
 **Michael Romero**  
-QA Tester · ISTQB® Certified Tester Foundation Level 4.0
+QA Tester · ISTQB® Certified Tester Foundation Level
 
-- GitHub: [MichaelR21z](https://github.com/MichaelR21z)
-- LinkedIn: añadir enlace del perfil
-- Email: añadir correo profesional
+💼 [LinkedIn](https://www.linkedin.com/in/michaelsromero/)
+
+📧 [Michaelromevi@gmail.com](mailto:Michaelromevi@gmail.com)
 
 ---
 
-## ⚠️ Disclaimer
+<div align="center">
 
-Este proyecto utiliza [automationintesting.online](https://automationintesting.online/) como entorno público de práctica.
+### Shady Meadows B&B QA Portfolio
 
-El repositorio, la estrategia de pruebas, la documentación, los Test Cases, la automatización, los reportes y las investigaciones pertenecen al trabajo realizado como proyecto de portfolio QA.
+**Manual · API · Cypress · Maestro · GitHub Actions · Mochawesome**
 
-Los datos del entorno pueden cambiar entre ejecuciones porque se trata de una aplicación pública y compartida.
+🚧 Continuous development
+
+</div>
