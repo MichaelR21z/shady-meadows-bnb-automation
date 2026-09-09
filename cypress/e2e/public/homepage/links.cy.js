@@ -42,6 +42,7 @@ describe('Public Links', () => {
         })
     })
 
+    // Related defect: SMB-119 - amenities link invalid target
     it('TC57 - Verificar que los enlaces internos y anchors apuntan a destinos existentes [SMB-119]', () => {
 
         cy.visit('/')

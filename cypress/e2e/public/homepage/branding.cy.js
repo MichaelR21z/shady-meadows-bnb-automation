@@ -29,9 +29,9 @@ describe('Homepage Branding', () => {
         })
     })
 
-
-    // Related defect: SMB-110 - The homepage crashes when a main /api/branding object is missing.
-    it('TTC41 - Validar comportamiento de la homepage cuando falta un objeto de /api/branding [SMB-110]', () => {
+    // Related defect: SMB-110 - missing branding object.
+    // The homepage crashes when a main /api/branding object is missing.
+    it('TC41 - Validar comportamiento de la homepage cuando falta un objeto de /api/branding [SMB-110]', () => {
         
         cy.intercept('GET', '**/api/branding', {
             statusCode: 200,

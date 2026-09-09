@@ -37,7 +37,8 @@ describe('Homepage Navigation', () => {
         cy.url().should('include', '/admin')
     })
 
-    // Related defect: SMB-120 - The Booking section is partially hidden by the sticky navbar after anchor navigation.
+    // Note: SMB-120 is a visual layout issue documented with screenshot evidence.
+    // This test verifies that header navigation reaches the expected sections.
     it('TC43 - Verificar visibilidad de las secciones al navegar desde el header [SMB-120]', () => {
 
         const sections = [
@@ -106,5 +107,4 @@ describe('Homepage Navigation', () => {
             cy.visit('/')
         })
     })
-
 })

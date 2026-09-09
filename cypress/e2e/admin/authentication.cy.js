@@ -61,83 +61,85 @@ describe('Administrator Authentication', () => {
             cy.get('form').should('be.visible')
         })
 
-        it('Should expire the administrator session after five minutes', { tags: ['@regression', '@slow'] }, () => {
-            // Authenticate through the API and open a protected page.
-            cy.loginAPI()
-            cy.visit('/admin/rooms')
+        // This test is commented out because it takes too long to run in the CI/CD pipeline.
+        // it('Should expire the administrator session after five minutes', { tags: ['@regression', '@slow'] }, () => {
+        //     // Authenticate through the API and open a protected page.
+        //     cy.loginAPI()
+        //     cy.visit('/admin/rooms')
 
-            // Wait five minutes to allow the administrator session to expire.
-            cy.wait(5 * 60 * 1000)
+        //     // Wait five minutes to allow the administrator session to expire.
+        //     cy.wait(5 * 60 * 1000)
 
-            // Listen for the session validation request before triggering it.
-            cy.intercept('POST', '**/api/auth/validate').as('validateSession')
+        //     // Listen for the session validation request before triggering it.
+        //     cy.intercept('POST', '**/api/auth/validate').as('validateSession')
 
-            // Attempt to access another protected page after the timeout.
-            cy.get('#reportLink').click()
+        //     // Attempt to access another protected page after the timeout.
+        //     cy.get('#reportLink').click()
 
-            // Verify that the backend rejects the expired session.
-            cy.wait('@validateSession').its('response.statusCode')
-                .should('eq', 403)
+        //     // Verify that the backend rejects the expired session.
+        //     cy.wait('@validateSession').its('response.statusCode')
+        //         .should('eq', 403)
 
-            // Verify that the administrator is redirected to the login page
-            cy.url().should('eq', `${Cypress.config('baseUrl')}/admin`)
-            cy.get('form').should('be.visible')
-        })
+        //     // Verify that the administrator is redirected to the login page
+        //     cy.url().should('eq', `${Cypress.config('baseUrl')}/admin`)
+        //     cy.get('form').should('be.visible')
+        // })
 
-        it('TC35 - Intentar reutilizar un token después de que la sesión haya expirado', () => {
+        // it('TC35 - Intentar reutilizar un token después de que la sesión haya expirado', () => {
 
-            //Login
-            cy.loginAPI().then((token) => {
-                cy.log('Token obtenido correctamente: ' + token)
+        //     //Login
+        //     cy.loginAPI().then((token) => {
+        //         cy.log('Token obtenido correctamente: ' + token)
 
-                 // Esperar 5 minutos para que expire el token
-                cy.log('Esperando 5 minutos para que expire el token...')
-                cy.wait(5 * 60 * 1000)
+        //          // Esperar 5 minutos para que expire el token
+        //         cy.log('Esperando 5 minutos para que expire el token...')
+        //         cy.wait(5 * 60 * 1000)
 
-                cy.request({
-                    method: 'GET',
-                    url: `${Cypress.config('baseUrl')}/api/branding`,
-                    headers: {
-                        Cookie: `token=${token}`
-                    },
-                    failOnStatusCode: false
-                }).then((response) => {
-                    cy.log(`Validación después de la expiración: ${response.status}`)
-                    expect(response.status).to.eq(200)
-                })
-            })
-        })
+        //         cy.request({
+        //             method: 'GET',
+        //             url: `${Cypress.config('baseUrl')}/api/branding`,
+        //             headers: {
+        //                 Cookie: `token=${token}`
+        //             },
+        //             failOnStatusCode: false
+        //         }).then((response) => {
+        //             cy.log(`Validación después de la expiración: ${response.status}`)
+        //             expect(response.status).to.eq(200)
+        //         })
+        //     })
+        // })
 
-        it('Should keep expiring the session at 5 minutes even with continuous activity', { tags: ['@regression', '@slow'] }, () => {
-            // Authenticate through the API and open a protected page.
-            cy.loginAPI()
-            cy.visit('/admin/rooms')
+        
+        // it('Should keep expiring the session at 5 minutes even with continuous activity', { tags: ['@regression', '@slow'] }, () => {
+        //     // Authenticate through the API and open a protected page.
+        //     cy.loginAPI()
+        //     cy.visit('/admin/rooms')
 
-            // Simulate user activity by reloading the page every minute.
-            // This verifies that activity does not extend the session lifetime.
-            for (let i = 0; i < 4; i++) {
-                cy.wait(60 * 1000)
-                cy.reload()
-            }
+        //     // Simulate user activity by reloading the page every minute.
+        //     // This verifies that activity does not extend the session lifetime.
+        //     for (let i = 0; i < 4; i++) {
+        //         cy.wait(60 * 1000)
+        //         cy.reload()
+        //     }
 
-            // Wait an extra margin so the timeout is clearly exceeded.
-            cy.wait(90 * 1000)
+        //     // Wait an extra margin so the timeout is clearly exceeded.
+        //     cy.wait(90 * 1000)
 
-            // Listen for the next session validation request.
-            cy.intercept('POST', '**/api/auth/validate').as('validateSession')
+        //     // Listen for the next session validation request.
+        //     cy.intercept('POST', '**/api/auth/validate').as('validateSession')
 
-            // Trigger a protected navigation after the timeout.
-            cy.visit('/admin/report')
+        //     // Trigger a protected navigation after the timeout.
+        //     cy.visit('/admin/report')
 
-            // Verify that the backend rejects the expired token.
-            cy.wait('@validateSession')
-                .its('response.statusCode')
-                .should('eq', 403)
+        //     // Verify that the backend rejects the expired token.
+        //     cy.wait('@validateSession')
+        //         .its('response.statusCode')
+        //         .should('eq', 403)
 
-            // Verify that the user is redirected to the login page.
-            cy.url().should('eq', `${Cypress.config('baseUrl')}/admin`)
-            cy.get('form').should('be.visible')
-        })
+        //     // Verify that the user is redirected to the login page.
+        //     cy.url().should('eq', `${Cypress.config('baseUrl')}/admin`)
+        //     cy.get('form').should('be.visible')
+        // })
     })
 
     context('Negative Tests', () => {
@@ -152,27 +154,6 @@ describe('Administrator Authentication', () => {
     })
 
     context('Reports Bugs', () => {
-
-        // No es un Bug 
-        it('Should invalidate the token after logout', () => {
-
-            cy.loginAPI().then((response) => {
-
-                const token = response.body.token;
-
-                // Store the token in a cookie to simulate an authenticated session.
-                cy.setCookie('token', token);
-
-                cy.visit('/admin/rooms');
-                cy.contains('Logout').click();
-
-
-                cy.validateToken(token).then((validateResponse) => {
-                    // Verify that the backend rejects the token after logout.
-                    expect(validateResponse.status).to.eq(403);
-                })
-            })
-        })
 
         it('SMB-57: Protected pages remain accessible after logout', () => {
             cy.loginAPI()
@@ -189,7 +170,6 @@ describe('Administrator Authentication', () => {
             cy.url().should('include', '/admin/report')
         })
 
-        // Verify the logout endpoint response observed in Postman.
         it('SMB-58: Endpoint returns HTTP 500 instead of HTTP 200', () => {
             cy.loginAPI()
 

@@ -118,7 +118,7 @@ describe('Public Contact Form', () => {
 
         const contactData = generateContactData('Service error test')
 
-        cy.intercept('POST', '/api/message', {
+        cy.intercept('POST', '**/api/message', {
             statusCode: 500,
             body: {
                 error: 'Internal Server Error'

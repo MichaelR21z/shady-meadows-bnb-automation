@@ -1,4 +1,8 @@
-describe('Homepage Images', () => {
+describe('Public Image Resources', () => {
+
+    // These tests validate public image resources used by the homepage.
+    // Since this is a shared practice environment, room data may be modified by other users,
+    // so dynamically created rooms can introduce external or broken image URLs.
 
     it('TC53 - Verificar las respuestas HTTP de los recursos de imagen públicos', () => {
 
@@ -18,7 +22,7 @@ describe('Homepage Images', () => {
             }
         })
 
-         // Find images rendered through the CSS background-image property
+        // Find images rendered through the CSS background-image property
         cy.get('[style*="background-image"]').each(($element) => {
 
             cy.wrap($element).invoke('css', 'background-image').then((backgroundImage) => {
@@ -52,7 +56,7 @@ describe('Homepage Images', () => {
             })
         })
 
-       // Collect image URLs from the branding endpoint used by the homepage 
+        // Collect image URLs from the branding endpoint used by the homepage 
         cy.request('GET', '/api/branding').then((response) => {
 
             expect(response.status).to.eq(200)
@@ -80,7 +84,7 @@ describe('Homepage Images', () => {
 
             // Remove duplicated URLs to avoid requesting the same image more than once
             const uniqueImageUrls = [...new Set(normalizedImageUrls)]
-             
+
             expect(uniqueImageUrls.length).to.be.greaterThan(0)
 
             // Send an HTTP request to every unique image resource found
@@ -100,8 +104,8 @@ describe('Homepage Images', () => {
                         `Image request failed: ${imageUrl}`
                     ).to.eq(200)
 
-                     // Confirm that the response is actually an image
-                     // and not HTML, JSON or another resource type
+                    // Confirm that the response is actually an image
+                    // and not HTML, JSON or another resource type
                     expect(
                         response.headers['content-type'],
                         `Invalid image content type: ${imageUrl}`
@@ -113,27 +117,41 @@ describe('Homepage Images', () => {
 
     it('TC54 - Verificar comportamiento de la aplicación cuando una imagen no puede cargarse', () => {
 
-        // Intercept the image request and simulate a 404 Not Found response.        
-        cy.intercept('GET', '**/images/rbp-logo.jpg', {
+        const brokenLogoUrl = `/images/tc54-broken-logo-${Date.now()}.jpg`
+
+        // Replace the branding logo URL with a controlled broken image URL for this test.
+        cy.intercept('GET', '**/api/branding', (req) => {
+            req.continue((res) => {
+                res.body.logoUrl = brokenLogoUrl
+            })
+        }).as('getBranding')
+
+        // Intercept the controlled logo request and simulate a 404 Not Found response.
+        cy.intercept('GET', `**${brokenLogoUrl}`, {
             statusCode: 404,
             body: 'Not Found'
         }).as('image404')
 
         cy.visit('/')
 
+        // Verify that the homepage requests the branding information.
+        cy.wait('@getBranding')
+            .its('response.statusCode')
+            .should('eq', 200)
+
+        // Verify that the controlled image request returns HTTP 404.
         cy.wait('@image404')
             .its('response.statusCode')
             .should('eq', 404)
 
         // Verify that the homepage remains visible after the image fails to load.
-        cy.get('body').should('be.visible')
+        cy.get('body')
+            .should('be.visible')
 
         // Verify that the main homepage sections remain visible and accessible.
         const sections = ['.hero', '#booking', '#rooms', '#location', '#contact']
 
         sections.forEach((section) => {
-            
-            // Scroll to each homepage section and verify that it remains visible after the image fails to load
             cy.get(section)
                 .scrollIntoView()
                 .should('be.visible')
