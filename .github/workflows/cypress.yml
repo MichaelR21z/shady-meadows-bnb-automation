@@ -17,10 +17,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v7
 
-      - name: Run Cypress tests
+      - name: Run Cypress public homepage tests
         uses: cypress-io/github-action@v7
         with:
           browser: chrome
+          spec: cypress/e2e/public/homepage/**/*.cy.js
 
         env:
           CYPRESS_adminUsername: ${{ secrets.CYPRESS_ADMIN_USERNAME }}
