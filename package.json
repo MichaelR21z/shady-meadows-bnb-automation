@@ -1,4 +1,8 @@
 {
+  "name": "shady-meadows-bnb-automation",
+  "version": "1.0.0",
+  "private": true,
+  "description": "QA automation portfolio for the Shady Meadows B&B application",
   "scripts": {
     "clean:reports": "rm -rf cypress/reports cypress/screenshots",
     "test": "npm run clean:reports && cypress run",
