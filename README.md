@@ -1,15 +1,48 @@
 <div align="center">
 
-# 🏨 Shady Meadows B&B — QA Portfolio
+<h1>🏨 Shady Meadows B&B</h1>
 
-### Manual Testing · API Testing · E2E · Cypress · Maestro · CI/CD
+<h3>QA Engineering Portfolio</h3>
 
-Proyecto práctico de Quality Assurance sobre una aplicación web real.
+<p>
+Manual Testing · Test Automation · API Testing · E2E · Mobile · CI/CD
+</p>
 
-🌐 [Ver aplicación](https://automationintesting.online/)  
-⚙️ [Ver ejecuciones de GitHub Actions](https://github.com/MichaelR21z/shady-meadows-bnb-automation/actions)
+<p>
+Proyecto práctico de Quality Assurance sobre una aplicación web real,
+combinando pruebas manuales, automatización y documentación de defectos.
+</p>
 
-[![Cypress Tests](https://github.com/MichaelR21z/shady-meadows-bnb-automation/actions/workflows/cypress.yml/badge.svg)](https://github.com/MichaelR21z/shady-meadows-bnb-automation/actions/workflows/cypress.yml)
+<p>
+  <a href="https://automationintesting.online/">
+    <strong>🌐 Ver aplicación</strong>
+  </a>
+  &nbsp;·&nbsp;
+  <a href="https://github.com/MichaelR21z/shady-meadows-bnb-automation/actions">
+    <strong>⚙️ GitHub Actions</strong>
+  </a>
+  &nbsp;·&nbsp;
+  <a href="docs/test-strategy.md">
+    <strong>📚 Test Strategy</strong>
+  </a>
+</p>
+
+<p>
+  <img src="https://img.shields.io/badge/Cypress-Test_Automation-69D3A7?style=for-the-badge&amp;logo=cypress&amp;logoColor=white" alt="Cypress">
+  <img src="https://img.shields.io/badge/JavaScript-Test_Code-F7DF1E?style=for-the-badge&amp;logo=javascript&amp;logoColor=black" alt="JavaScript">
+  <img src="https://img.shields.io/badge/Postman-API_Testing-FF6C37?style=for-the-badge&amp;logo=postman&amp;logoColor=white" alt="Postman">
+</p>
+
+<p>
+  <img src="https://img.shields.io/badge/Maestro_Studio-Mobile_Testing-7B61FF?style=for-the-badge" alt="Maestro">
+  <img src="https://img.shields.io/badge/GitHub_Actions-CI%2FCD-2088FF?style=for-the-badge&amp;logo=githubactions&amp;logoColor=white" alt="GitHub Actions">
+  <img src="https://img.shields.io/badge/Mochawesome-Test_Reports-8A2BE2?style=for-the-badge" alt="Mochawesome">
+  <img src="https://img.shields.io/badge/Jira-Test_Management-0052CC?style=for-the-badge&amp;logo=jira&amp;logoColor=white" alt="Jira">
+</p>
+
+<a href="https://github.com/MichaelR21z/shady-meadows-bnb-automation/actions/workflows/cypress.yml">
+  <img src="https://github.com/MichaelR21z/shady-meadows-bnb-automation/actions/workflows/cypress.yml/badge.svg" alt="Cypress Tests">
+</a>
 
 </div>
 
@@ -134,7 +167,7 @@ Esto permite diferenciar una regresión nueva de un defecto que ya está identif
 | --- | --- |
 | **Cypress** | Automatización web, E2E, API e integración |
 | **JavaScript** | Implementación de tests, utilidades y Page Objects |
-| **Maestro** | Pruebas mobile y responsive en simuladores iOS |
+| **Maestro Studio** | Pruebas mobile y responsive en simuladores iOS |
 | **Postman** | Exploración de APIs, validación y evidencia |
 | **Jira** | Organización de épicas, historias, casos y defectos |
 | **GitHub Actions** | Integración continua |

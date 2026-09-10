@@ -1,225 +1,588 @@
 # Test Strategy — Shady Meadows B&B
 
-## 1. Objetivo
+## 1. Propósito
 
-Esta estrategia define cómo se planifican, ejecutan y automatizan las pruebas del proyecto **Shady Meadows B&B QA Portfolio**.
+Esta estrategia explica cómo se planifican, diseñan, ejecutan y mantienen las pruebas del proyecto **Shady Meadows B&B QA Portfolio**.
 
-El objetivo principal es validar el comportamiento de la aplicación desde diferentes niveles y mantener una cobertura clara, trazable y mantenible.
+El objetivo es aplicar un proceso de calidad que permita:
+
+- validar el comportamiento de la aplicación;
+- detectar regresiones;
+- identificar y documentar defectos;
+- comprobar la integración entre interfaz y API;
+- mantener pruebas claras y repetibles;
+- generar evidencia útil para analizar resultados.
+
+El proyecto se desarrolla de forma progresiva. La estrategia evoluciona a medida que se incorporan nuevas funcionalidades.
 
 ---
 
-## 2. Alcance
+## 2. Aplicación bajo prueba
 
-El proyecto combina pruebas sobre:
+| Campo | Información |
+| --- | --- |
+| Aplicación | Shady Meadows B&B |
+| Plataforma | Web responsive |
+| URL | `https://automationintesting.online/` |
+| Tipo de entorno | Entorno público y compartido de práctica |
+| Frontend | Aplicación web |
+| Backend | API REST |
+| Automatización principal | Cypress |
+| Mobile y responsive | Maestro Studio |
+| Integración continua | GitHub Actions |
+| Reporting | Mochawesome |
 
-- interfaz web;
-- navegación;
-- formularios;
+La aplicación es un entorno compartido. Otros usuarios pueden crear, modificar o eliminar información.
+
+Esto puede afectar temporalmente:
+
 - habitaciones;
 - reservas;
-- autenticación;
-- APIs;
-- persistencia de datos;
-- comportamiento responsive;
-- flujos mobile;
-- manejo de errores;
-- integración UI ↔ API.
+- mensajes;
+- imágenes externas;
+- datos administrativos;
+- resultados obtenidos directamente desde la API.
 
-La cobertura se amplía progresivamente a medida que avanzan las distintas áreas funcionales del proyecto.
+Cuando el estado compartido puede producir resultados inestables, se documenta la limitación y se utilizan simulaciones controladas cuando aportan mayor fiabilidad.
 
 ---
 
-## 3. Enfoque de testing
+## 3. Objetivos de calidad
 
-No todos los escenarios se prueban de la misma forma.
+La estrategia busca comprobar que:
 
-La herramienta y el tipo de prueba se eligen según el comportamiento que se necesita validar.
+- las funcionalidades principales estén disponibles;
+- la información mostrada sea correcta;
+- la navegación lleve al destino esperado;
+- los formularios acepten datos válidos;
+- los datos inválidos sean rechazados;
+- los límites se procesen correctamente;
+- los errores del backend no bloqueen la interfaz;
+- la información de UI y API sea consistente;
+- los datos enviados puedan verificarse en backend;
+- los defectos conocidos continúen siendo reproducibles;
+- las regresiones nuevas sean detectadas automáticamente.
+
+---
+
+## 4. Alcance actual
+
+### SMB-1 — Homepage pública y habitaciones
+
+Incluye:
+
+- branding;
+- información del hotel;
+- navegación;
+- catálogo de habitaciones;
+- imágenes;
+- enlaces;
+- mapa y ubicación;
+- comportamiento responsive;
+- estados incompletos o vacíos.
+
+### SMB-2 — Formulario de contacto
+
+Incluye:
+
+- envío con datos válidos;
+- persistencia del mensaje;
+- campos obligatorios;
+- formatos inválidos;
+- análisis de valores límite;
+- respuestas de error;
+- feedback mostrado al usuario;
+- integración UI ↔ API.
+
+### Áreas en desarrollo
+
+| Área | Funcionalidad | Estado |
+| --- | --- | --- |
+| **SMB-3** | Disponibilidad y reservas | En desarrollo |
+| **SMB-4** | Autenticación administrativa | En desarrollo |
+| **SMB-5** | Reportes y ocupación | Próxima entrega |
+
+Las áreas en desarrollo no se incorporan a la regresión principal hasta que sus pruebas sean suficientemente estables.
+
+---
+
+## 5. Enfoque de testing
+
+La herramienta se elige según lo que se necesita validar.
 
 ```mermaid
 flowchart TD
-    A[Nuevo escenario] --> B{¿Qué se quiere validar?}
+    A[Nuevo escenario] --> B{¿Qué se quiere comprobar?}
 
-    B -->|UI / flujo web| C[Cypress]
-    B -->|API / backend| D[Postman o cy.request]
-    B -->|Mobile / Responsive| E[Maestro]
-    B -->|Validación subjetiva| F[Manual]
+    B -->|Comportamiento web| C[Cypress]
+    B -->|Servicio o persistencia| D[API Testing]
+    B -->|Mobile o dispositivo| E[Maestro Studio]
+    B -->|Experiencia visual| F[Prueba manual]
 
-    C --> G[Automatización]
+    C --> G[Resultado]
     D --> G
     E --> G
-    F --> H[Ejecución manual]
+    F --> G
+
+    G --> H{¿Cumple lo esperado?}
+    H -->|Sí| I[Regresión]
+    H -->|No| J[Defecto y evidencia]
 ```
 
----
+No todos los escenarios deben automatizarse.
 
-## 4. Tipos de prueba utilizados
-
-| Tipo | Uso |
-| --- | --- |
-| **Functional Testing** | Validar que una funcionalidad cumpla el comportamiento esperado |
-| **E2E Testing** | Validar flujos completos desde la interfaz |
-| **API Testing** | Validar status codes, responses, datos y persistencia |
-| **Integration Testing** | Comprobar correspondencia entre UI y backend |
-| **Negative Testing** | Validar datos inválidos y estados inesperados |
-| **Boundary Testing** | Validar valores mínimos, máximos y límites |
-| **Responsive Testing** | Validar comportamiento en distintos tamaños de pantalla |
-| **Mobile Testing** | Validar flujos sobre dispositivos o simuladores móviles |
-| **Regression Testing** | Reejecutar escenarios automatizados para detectar cambios no deseados |
-
----
-
-## 5. Diseño de Test Cases
-
-Los Test Cases se diseñan a partir del comportamiento esperado de cada funcionalidad.
-
-Se busca:
-
-- evitar escenarios duplicados;
-- agrupar casos relacionados cuando sea posible;
-- separar validaciones con objetivos distintos;
-- utilizar datos claros y reproducibles;
-- mantener trazabilidad con defectos encontrados.
-
-Las técnicas de diseño se documentan únicamente cuando realmente aplican.
-
-Ejemplos utilizados en el proyecto:
-
-- **Partición de equivalencia**
-- **Análisis de valores límite**
-
-No se añade una técnica de diseño de forma automática si el escenario no la necesita.
-
----
-
-## 6. Automatización
-
-La automatización se utiliza cuando aporta valor en:
+Una prueba se automatiza cuando aporta valor en:
 
 - regresión;
 - repetibilidad;
 - validaciones frecuentes;
-- flujos críticos;
-- escenarios con múltiples combinaciones;
-- comprobaciones UI ↔ API.
+- flujos importantes;
+- pruebas con múltiples combinaciones;
+- simulación de errores;
+- comparación entre UI y API.
 
-No todos los Test Cases se automatizan.
+Una prueba puede mantenerse manual cuando depende principalmente de:
 
-Algunas validaciones permanecen manuales cuando dependen principalmente de:
-
-- claridad visual;
-- percepción del usuario;
-- experiencia de uso;
-- interpretación subjetiva.
-
-```mermaid
-flowchart LR
-    A[Test Case] --> B{¿Aporta valor automatizar?}
-    B -->|Sí| C[Automation]
-    B -->|No| D[Manual]
-    C --> E[Regression]
-```
+- percepción visual;
+- claridad del contenido;
+- experiencia de usuario;
+- comportamiento difícil de medir de forma fiable;
+- interpretación humana.
 
 ---
 
-## 7. Cypress
+## 6. Tipos de prueba
+
+| Tipo | Objetivo |
+| --- | --- |
+| **Functional Testing** | Confirmar que una funcionalidad cumple el resultado esperado |
+| **UI Testing** | Validar elementos, contenido, formularios y navegación |
+| **E2E Testing** | Comprobar un flujo completo desde la interfaz hasta el backend |
+| **API Testing** | Validar códigos HTTP, responses, estructuras y datos |
+| **Integration Testing** | Comparar el comportamiento de la UI con la información del backend |
+| **Negative Testing** | Comprobar datos inválidos y situaciones inesperadas |
+| **Boundary Testing** | Validar valores mínimos, máximos y fuera de rango |
+| **Responsive Testing** | Comprobar el comportamiento en diferentes tamaños de pantalla |
+| **Mobile Testing** | Validar flujos en dispositivos o simuladores móviles |
+| **Regression Testing** | Detectar cambios no deseados en funcionalidades estables |
+| **Exploratory Testing** | Investigar comportamientos, riesgos y escenarios no previstos |
+
+---
+
+## 7. Diseño de Test Cases
+
+Los Test Cases se diseñan a partir de:
+
+- User Stories;
+- criterios de aceptación;
+- comportamiento esperado;
+- riesgos identificados;
+- resultados de pruebas exploratorias;
+- defectos encontrados anteriormente.
+
+Cada Test Case debe tener un objetivo claro y evitar comprobaciones que no estén relacionadas con ese objetivo.
+
+Cuando aplica, se utilizan técnicas como:
+
+### Partición de equivalencia
+
+Los datos se agrupan según comportamientos equivalentes.
+
+Ejemplo:
+
+```text
+Email válido
+Email vacío
+Email con formato inválido
+```
+
+### Análisis de valores límite
+
+Se prueban valores cercanos a los límites permitidos.
+
+Ejemplo:
+
+```text
+Mínimo - 1
+Mínimo
+Máximo
+Máximo + 1
+```
+
+### Transición de estados
+
+Se comprueba cómo cambia la aplicación después de una acción.
+
+Ejemplo:
+
+```text
+Formulario vacío
+    ↓
+Enviar
+    ↓
+Mostrar errores
+```
+
+### Error guessing
+
+Se prueban situaciones basadas en experiencia y riesgos conocidos.
+
+Ejemplos:
+
+- endpoints que devuelven objetos incompletos;
+- imágenes inexistentes;
+- enlaces con destinos vacíos;
+- servicios que responden HTTP 500;
+- rutas no existentes.
+
+---
+
+## 8. Datos de prueba
+
+Siempre que sea posible se utilizan datos dinámicos.
+
+Ejemplos:
+
+```text
+Nombre con timestamp
+Email único
+Subject único
+ID obtenido desde API
+Datos generados durante la ejecución
+```
+
+Esto ayuda a reducir:
+
+- colisiones entre ejecuciones;
+- dependencia de registros anteriores;
+- IDs hardcodeados;
+- falsos resultados;
+- conflictos con otros usuarios.
+
+Los datos compartidos no se consideran completamente estables. Una prueba que dependa del estado real del entorno debe tener en cuenta que ese estado puede cambiar durante la ejecución.
+
+---
+
+## 9. Automatización con Cypress
 
 Cypress es la herramienta principal para automatización web.
 
 Se utiliza para:
 
-- UI Testing;
-- E2E;
-- formularios;
-- navegación;
-- pruebas negativas;
-- valores límite;
-- interceptación de requests;
-- simulación de errores;
-- validación de responses;
-- consultas API mediante `cy.request()`.
+- interactuar con la interfaz;
+- validar elementos y contenido;
+- comprobar navegación;
+- completar formularios;
+- interceptar requests;
+- simular responses;
+- consultar endpoints;
+- verificar persistencia;
+- comparar UI y API.
 
-La suite utiliza:
+La automatización utiliza:
 
 - Page Objects;
-- comandos reutilizables;
-- utilidades;
+- comandos personalizados;
+- utilidades reutilizables;
 - datos dinámicos;
-- intercepts;
+- aliases;
+- `cy.intercept()`;
+- `cy.request()`;
 - variables de entorno.
 
----
+La prioridad es mantener pruebas:
 
-## 8. Maestro
-
-Maestro se utiliza para pruebas mobile y responsive cuando el comportamiento del dispositivo aporta valor adicional.
-
-Actualmente se usa principalmente para:
-
-- navegación mobile;
-- menús responsive;
-- validaciones sobre simuladores iOS;
-- comprobaciones en diferentes tamaños de pantalla.
+- legibles;
+- independientes;
+- mantenibles;
+- fáciles de investigar cuando fallan.
 
 ---
 
-## 9. API Testing
+## 10. Simulación de escenarios
 
-Postman se utiliza como herramienta de apoyo para validar directamente los servicios de la aplicación.
-
-Se utiliza para:
-
-- ejecutar requests;
-- validar status codes;
-- revisar response bodies;
-- comprobar estructuras;
-- verificar persistencia;
-- apoyar investigaciones de bugs;
-- generar evidencias.
-
-Cypress también realiza validaciones API cuando forman parte de un flujo automatizado mediante:
-
-```javascript
-cy.request()
-```
-
-La consolidación de las requests en una colección Postman versionada y su ejecución con Newman forma parte de futuras entregas.
-
----
-
-## 10. Datos de prueba
-
-Siempre que sea posible se utilizan datos dinámicos para reducir:
-
-- colisiones entre ejecuciones;
-- dependencia de registros anteriores;
-- IDs hardcodeados;
-- falsos positivos o negativos.
+Algunos estados son difíciles de reproducir de forma natural. Para estos casos se utilizan interceptaciones controladas.
 
 Ejemplos:
 
-```text
-Nombre dinámico
-Email dinámico
-Subject dinámico
-IDs obtenidos desde la API
-Fechas calculadas durante la ejecución
-```
+| Simulación | Objetivo |
+| --- | --- |
+| Objeto de branding incompleto | Comprobar la estabilidad de la homepage |
+| Catálogo sin habitaciones | Validar el empty state |
+| Imagen con HTTP 404 | Comprobar el comportamiento ante un recurso roto |
+| Servicio con HTTP 500 | Validar la gestión de errores |
+| Response con datos incompletos | Comprobar cómo se representa la información |
 
-Los identificadores creados o recuperados durante una prueba se obtienen dinámicamente cuando la aplicación lo permite.
+Las simulaciones deben reproducir un escenario realista y mantener un resultado verificable.
+
+No se utilizan únicamente para conseguir que un test pase.
 
 ---
 
-## 11. Variables de entorno
+## 11. API Testing
 
-Las credenciales y datos sensibles no se almacenan directamente dentro de los tests.
+La API se valida de dos formas.
 
-Localmente se utiliza:
+### Cypress
+
+Se utiliza `cy.request()` cuando la validación del backend forma parte del mismo flujo automatizado.
+
+Ejemplo:
+
+```mermaid
+flowchart LR
+    A[Completar formulario] --> B[Enviar desde UI]
+    B --> C[Validar response]
+    C --> D[Consultar API]
+    D --> E[Comprobar persistencia]
+    E --> F[Comparar datos]
+```
+
+### Postman
+
+Postman se utiliza como herramienta de apoyo para:
+
+- explorar endpoints;
+- comprobar responses;
+- investigar defectos;
+- validar estructuras;
+- preparar datos;
+- generar evidencias.
+
+La creación de una colección versionada y su ejecución mediante Newman forman parte del roadmap.
+
+---
+
+## 12. Mobile y responsive con Maestro Studio
+
+Maestro Studio se utiliza para validar comportamientos que dependen del dispositivo o del tamaño de pantalla.
+
+Actualmente se aplica a:
+
+- navegación mobile;
+- menú responsive;
+- acceso a secciones;
+- comportamiento después de una interacción;
+- pruebas sobre simuladores iOS.
+
+Las coordenadas o acciones dependientes del dispositivo deben mantenerse separadas cuando un mismo flujo no sea fiable en diferentes tamaños de pantalla.
+
+---
+
+## 13. Organización de las suites
+
+La automatización está separada según el propósito de cada prueba.
+
+### Regression Suite
+
+Ruta:
+
+```text
+cypress/e2e/public/homepage/
+```
+
+Contiene escenarios estables.
+
+Estos tests deben pasar. Un fallo puede indicar:
+
+- una regresión;
+- un cambio en la aplicación;
+- una caída del entorno;
+- datos compartidos inesperados;
+- un problema en la automatización.
+
+### Known Defects Suite
+
+Ruta:
+
+```text
+cypress/e2e/known-defects/homepage/
+```
+
+Contiene escenarios relacionados con defectos ya identificados.
+
+| Suite | Objetivo | Comportamiento en CI |
+| --- | --- | --- |
+| **Regression** | Detectar regresiones nuevas | Bloqueante |
+| **Known Defects** | Mantener defectos reproducibles | No bloqueante |
+
+Los tests de defectos mantienen el resultado esperado del producto. No se modifican para aceptar un comportamiento incorrecto.
+
+Cuando uno de estos tests deja de fallar:
+
+1. Se vuelve a ejecutar.
+2. Se revisa manualmente el comportamiento.
+3. Se confirma si el defecto fue corregido.
+4. Se actualiza su documentación.
+5. El escenario puede trasladarse a regresión.
+
+Un test que pasa no cierra automáticamente un defecto. Siempre se realiza una comprobación antes de cambiar su estado.
+
+---
+
+## 14. Gestión de defectos
+
+Cuando el resultado actual no coincide con el esperado, se analiza si existe un defecto.
+
+```mermaid
+flowchart LR
+    A[Test Case] --> B[Ejecución]
+    B --> C{Resultado}
+    C -->|Passed| D[Regresión]
+    C -->|Failed| E[Investigar]
+    E --> F[Bug]
+    F --> G[Evidencia]
+    G --> H[Known Defects Suite]
+```
+
+Cada bug debe incluir, cuando corresponda:
+
+- descripción;
+- relación con Epic y Test Case;
+- precondiciones;
+- datos utilizados;
+- pasos para reproducir;
+- resultado actual;
+- resultado esperado;
+- severidad;
+- prioridad;
+- entorno;
+- evidencia;
+- recomendación.
+
+### Severidad y prioridad
+
+La severidad representa el impacto técnico o funcional.
+
+La prioridad indica la urgencia con la que debería resolverse.
+
+Un defecto puede tener severidad baja y prioridad alta si afecta de forma frecuente a la experiencia del usuario.
+
+---
+
+## 15. Trazabilidad
+
+La documentación mantiene relación entre:
+
+```text
+Epic
+  ↓
+User Story
+  ↓
+Acceptance Criteria
+  ↓
+Test Case
+  ↓
+Resultado
+  ↓
+Bug
+  ↓
+Evidence
+```
+
+La trazabilidad permite conocer:
+
+- qué requisito se está validando;
+- qué caso detectó un defecto;
+- qué evidencia demuestra el resultado;
+- qué prueba automatizada cubre el escenario.
+
+Los identificadores `SMB-*` y `TC*` se utilizan para mantener esta relación.
+
+---
+
+## 16. Continuous Integration
+
+GitHub Actions ejecuta las pruebas automáticamente después de:
+
+- un `push` a `main`;
+- un Pull Request hacia `main`;
+- una ejecución manual.
+
+El workflow contiene dos jobs independientes.
+
+### Public Homepage Regression
+
+Ejecuta:
+
+```text
+cypress/e2e/public/homepage/
+```
+
+Este job es bloqueante. Si falla, CI se marca como fallida.
+
+### Known Defects
+
+Ejecuta:
+
+```text
+cypress/e2e/known-defects/homepage/
+```
+
+Este job es informativo y no bloqueante.
+
+Los fallos esperados no impiden que la regresión principal quede verde.
+
+```mermaid
+flowchart TD
+    A[Push o Pull Request] --> B[GitHub Actions]
+    B --> C[Regression]
+    B --> D[Known Defects]
+
+    C -->|Passed| E[CI correcta]
+    C -->|Failed| F[Investigar regresión]
+
+    D --> G[Resultado informativo]
+    G --> H[Artifact]
+```
+
+---
+
+## 17. Criterios de entrada
+
+Antes de ejecutar una suite se comprueba que:
+
+- la aplicación esté disponible;
+- el entorno permita acceder a la funcionalidad;
+- las dependencias estén instaladas;
+- las variables necesarias estén configuradas;
+- los datos mínimos estén disponibles;
+- el navegador requerido pueda iniciarse.
+
+Para áreas administrativas también se necesitan credenciales configuradas mediante variables de entorno.
+
+---
+
+## 18. Criterios de salida
+
+Una ejecución de regresión se considera satisfactoria cuando:
+
+- todos los tests de regresión pasan;
+- no existen errores inesperados de configuración;
+- el reporte se genera correctamente;
+- los fallos del entorno han sido analizados;
+- no se detectan regresiones nuevas.
+
+La suite de defectos conocidos se considera correctamente ejecutada cuando:
+
+- todos los specs se ejecutan;
+- los resultados esperados quedan registrados;
+- el reporte se genera;
+- los cambios de comportamiento son revisados.
+
+---
+
+## 19. Variables de entorno
+
+Las credenciales y valores sensibles no se almacenan directamente en los tests.
+
+En local se utiliza:
 
 ```text
 cypress.env.json
 ```
 
-Este archivo está excluido del repositorio mediante `.gitignore`.
+Este archivo está excluido mediante `.gitignore`.
 
 El repositorio incluye:
 
@@ -227,9 +590,15 @@ El repositorio incluye:
 cypress.env.example.json
 ```
 
-como referencia de configuración.
+como referencia.
 
-En GitHub Actions las credenciales se almacenan mediante **Repository Secrets**.
+Los valores sensibles se obtienen mediante:
+
+```javascript
+cy.env(['adminUsername', 'adminPassword'])
+```
+
+En GitHub Actions se utilizan Repository Secrets.
 
 ```mermaid
 flowchart LR
@@ -239,144 +608,119 @@ flowchart LR
     D --> E
 ```
 
----
-
-## 12. Gestión de defectos
-
-Cuando un Test Case no cumple el resultado esperado:
-
-```text
-Test Case
-   ↓
-Failed
-   ↓
-Bug
-   ↓
-Evidence
-```
-
-Cada bug documentado incluye información suficiente para reproducir y comprender el defecto.
-
-Las evidencias permanentes se almacenan en:
-
-```text
-docs/evidence/
-```
-
-Las grabaciones de mayor tamaño pueden mantenerse externamente y enlazarse desde el bug correspondiente.
+Los valores sensibles no deben imprimirse en logs, errores ni reportes.
 
 ---
 
-## 13. Bugs conocidos y automatización
+## 20. Reporting y evidencias
 
-Un test automatizado puede permanecer en estado **Failed** cuando reproduce un bug conocido.
+Las ejecuciones Cypress generan reportes mediante Mochawesome.
 
-La prueba sigue validando el comportamiento esperado y no se modifica para aceptar un comportamiento defectuoso.
-
-Esto permite detectar cuándo el bug deja de reproducirse.
-
-Los bugs conocidos no se consideran automáticamente errores de la automatización.
-
----
-
-## 14. Continuous Integration
-
-GitHub Actions ejecuta automáticamente Cypress después de:
-
-- `push` a `main`;
-- Pull Requests hacia `main`;
-- ejecución manual del workflow.
-
-Actualmente CI está limitado a:
-
-```text
-cypress/e2e/public/homepage/
-```
-
-porque otras áreas del proyecto siguen en desarrollo.
-
-```mermaid
-flowchart LR
-    A[Push / PR] --> B[GitHub Actions]
-    B --> C[Cypress]
-    C --> D[Public Homepage]
-    D --> E[Mochawesome]
-    E --> F[HTML Report]
-```
-
-La cobertura de CI se ampliará progresivamente a Booking, Admin y futuras áreas a medida que se complete su implementación.
-
----
-
-## 15. Reporting
-
-Las ejecuciones Cypress generan reportes mediante **Mochawesome**.
-
-El reporte incluye:
-
-- tests ejecutados;
-- Passed;
-- Failed;
-- duración;
-- suites;
-- errores;
-- screenshots generados durante fallos.
-
-Localmente:
+El reporte local:
 
 ```text
 cypress/reports/index.html
 ```
 
-Antes de cada nueva ejecución se eliminan los reportes y screenshots anteriores.
+incluye:
 
-En GitHub Actions el reporte se guarda como un artifact temporal durante **2 días**.
+- tests ejecutados;
+- resultados Passed y Failed;
+- duración;
+- suites;
+- mensajes de error;
+- screenshots asociados a fallos.
 
-Los reportes no se versionan en el repositorio.
+GitHub Actions genera artifacts independientes:
 
----
+```text
+regression-mochawesome-report
+known-defects-mochawesome-report
+```
 
-## 16. Evidencia vs reporte de automatización
+Los artifacts son temporales y se conservan durante dos días.
 
-La evidencia de bugs y los reportes de Cypress tienen objetivos diferentes.
+### Diferencia entre reporte y evidencia
 
-| Elemento | Objetivo | Permanencia |
+| Elemento | Objetivo | Conservación |
 | --- | --- | --- |
-| `docs/evidence/` | Evidencia oficial del defecto | Permanente |
-| Mochawesome local | Resultado de la última ejecución | Temporal |
-| Mochawesome CI | Resultado de ejecución automática | 2 días |
-| Cypress screenshots | Apoyo para debugging | Temporal |
+| `docs/evidence/` | Demostrar un defecto documentado | Permanente |
+| Mochawesome local | Analizar la última ejecución | Temporal |
+| Mochawesome CI | Revisar una ejecución automática | Temporal |
+| Cypress screenshots | Facilitar la investigación de fallos | Temporal |
 
 ---
 
-## 17. Criterios generales de calidad
+## 21. Mantenimiento de las pruebas
+
+Cuando cambia la aplicación se revisa:
+
+- si el comportamiento esperado cambió;
+- si el selector continúa siendo estable;
+- si la documentación sigue siendo correcta;
+- si el escenario pertenece a regresión;
+- si un defecto conocido fue corregido;
+- si la prueba sigue aportando valor.
+
+No se cambia una expectativa únicamente para conseguir que un test pase.
+
+Primero se determina si cambió:
+
+- el requisito;
+- la aplicación;
+- el entorno;
+- los datos;
+- o la automatización.
+
+---
+
+## 22. Riesgos y limitaciones
+
+| Riesgo | Tratamiento |
+| --- | --- |
+| Entorno compartido | Utilizar datos dinámicos y analizar diferencias temporales |
+| Datos modificados por otros usuarios | Evitar depender de cantidades o IDs fijos |
+| Servicios externos | Registrar claramente el recurso afectado |
+| Defectos conocidos | Ejecutarlos en una suite no bloqueante |
+| Errores difíciles de reproducir | Utilizar interceptaciones controladas |
+| Credenciales | Gestionarlas mediante variables y secretos |
+| Tests en desarrollo | No incorporarlos a regresión hasta estabilizarlos |
+
+---
+
+## 23. Criterios generales de calidad
 
 Durante el proyecto se busca:
 
 - mantener tests independientes;
-- evitar duplicación;
-- evitar datos hardcodeados;
-- utilizar selectores estables cuando sea posible;
+- evitar duplicación innecesaria;
+- utilizar nombres claros;
+- mantener comentarios breves y útiles;
+- evitar esperas fijas;
+- reducir datos hardcodeados;
+- utilizar selectores estables;
 - mantener documentación y automatización alineadas;
-- separar pruebas manuales y automatizadas;
-- documentar defectos reproducibles;
-- mantener trazabilidad;
-- automatizar solo cuando aporta valor;
-- ampliar regresión progresivamente.
+- separar regresión y defectos conocidos;
+- conservar evidencia reproducible;
+- automatizar cuando aporta valor;
+- investigar los fallos antes de modificar una expectativa.
 
 ---
 
-## 18. Estado de la estrategia
+## 24. Estado y evolución
 
-> 🚧 **Proyecto en curso**
+La estrategia está en desarrollo continuo.
 
-La estrategia evoluciona junto con el proyecto.
+Próximas mejoras:
 
-Próximas mejoras previstas:
+- ampliar la cobertura de reservas;
+- completar autenticación administrativa;
+- incorporar accesibilidad automatizada;
+- versionar una colección Postman;
+- ejecutar pruebas API mediante Newman;
+- añadir ESLint y Prettier;
+- fijar la versión de Node.js;
+- ampliar las validaciones de CI;
+- revisar periódicamente la trazabilidad.
 
-- ampliar cobertura de Booking;
-- incorporar Admin a CI;
-- consolidar colección Postman;
-- ejecutar APIs con Newman;
-- ampliar la suite de regresión;
-- revisar y ajustar la estrategia según crezca el repositorio.
+Los resultados actuales y el estado funcional del proyecto se mantienen actualizados en el [`README.md`](../README.md).
