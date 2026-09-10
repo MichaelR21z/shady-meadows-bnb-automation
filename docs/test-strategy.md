@@ -235,7 +235,7 @@ En GitHub Actions las credenciales se almacenan mediante **Repository Secrets**.
 flowchart LR
     A[Local] --> B[cypress.env.json]
     C[GitHub Actions] --> D[Repository Secrets]
-    B --> E[Cypress.env]
+    B --> E[cy.env]
     D --> E
 ```
 

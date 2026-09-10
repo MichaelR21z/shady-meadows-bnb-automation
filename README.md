@@ -299,8 +299,11 @@ con valores de ejemplo:
 Los tests acceden a estas variables mediante:
 
 ```javascript
-Cypress.env('adminUsername')
-Cypress.env('adminPassword')
+cy.env(['adminUsername', 'adminPassword']).then(
+  ({ adminUsername, adminPassword }) => {
+    // Use credentials securely
+  }
+)
 ```
 
 En GitHub Actions los valores reales se almacenan mediante **Repository Secrets**.
@@ -308,7 +311,7 @@ En GitHub Actions los valores reales se almacenan mediante **Repository Secrets*
 ```mermaid
 flowchart TD
     A[Local] --> B[cypress.env.json]
-    B --> D[Cypress.env]
+    B --> D[cy.env]
 
     E[GitHub Actions] --> F[Repository Secrets]
     F --> D

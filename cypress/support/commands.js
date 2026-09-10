@@ -1,22 +1,29 @@
 // Logs in through the API using credentials stored in Cypress environment variables
 // Stores the authentication token as a cookie for subsequent authenticated requests
 
-Cypress.Commands.add('loginAPI', (username = Cypress.env('adminUsername'), password = Cypress.env('adminPassword')) => {
-    return cy.request({
-      method: 'POST',
-      url: `${Cypress.config('baseUrl')}/api/auth/login`,
-      body: {
-        username,
-        password
-      }
-    }).then((response) => {
+Cypress.Commands.add('loginAPI', () => {
+  return cy
+    .env(['adminUsername', 'adminPassword'])
+    .then(({ adminUsername, adminPassword }) => {
+      expect(Boolean(adminUsername), 'Admin username is configured').to.be.true
+      expect(Boolean(adminPassword), 'Admin password is configured').to.be.true
 
+      return cy.request({
+        method: 'POST',
+        url: `${Cypress.config('baseUrl')}/api/auth/login`,
+        body: {
+          username: adminUsername,
+          password: adminPassword
+        }
+      })
+    })
+    .then((response) => {
       expect(response.status).to.eq(200)
       expect(response.body).to.have.property('token')
 
       return response.body.token
     })
-  })
+})
 
 Cypress.Commands.add('loginUI', (username, password) => {
     cy.visit('/')
