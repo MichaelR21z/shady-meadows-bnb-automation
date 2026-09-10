@@ -1,478 +1,225 @@
-<div align="center">
+# Test Strategy — Shady Meadows B&B
 
-# 🏨 Shady Meadows B&B — QA Portfolio
+## 1. Objetivo
 
-### Manual Testing · API Testing · E2E · Cypress · Maestro · CI/CD
+Esta estrategia define cómo se planifican, ejecutan y automatizan las pruebas del proyecto **Shady Meadows B&B QA Portfolio**.
 
-Proyecto práctico de Quality Assurance sobre una aplicación web real.
-
-🌐 [Ver aplicación](https://automationintesting.online/)  
-⚙️ [Ver ejecuciones de GitHub Actions](https://github.com/MichaelR21z/shady-meadows-bnb-automation/actions)
-
-[![Cypress Tests](https://github.com/MichaelR21z/shady-meadows-bnb-automation/actions/workflows/cypress.yml/badge.svg)](https://github.com/MichaelR21z/shady-meadows-bnb-automation/actions/workflows/cypress.yml)
-
-</div>
+El objetivo principal es validar el comportamiento de la aplicación desde diferentes niveles y mantener una cobertura clara, trazable y mantenible.
 
 ---
 
-## 👋 Sobre el proyecto
+## 2. Alcance
 
-Este repositorio forma parte de mi portafolio como **QA Tester**.
+El proyecto combina pruebas sobre:
 
-El objetivo es mostrar un proceso de calidad completo: analizar una funcionalidad, diseñar pruebas, ejecutarlas, documentar defectos y automatizar los escenarios que aportan valor a la regresión.
+- interfaz web;
+- navegación;
+- formularios;
+- habitaciones;
+- reservas;
+- autenticación;
+- APIs;
+- persistencia de datos;
+- comportamiento responsive;
+- flujos mobile;
+- manejo de errores;
+- integración UI ↔ API.
 
-El proyecto combina pruebas manuales y automatizadas sobre la aplicación **Restful Booker Platform — Shady Meadows B&B**.
-
-```mermaid
-flowchart LR
-    A[Analizar] --> B[Diseñar]
-    B --> C[Ejecutar]
-    C --> D{Resultado}
-    D -->|Correcto| E[Regresión]
-    D -->|Incorrecto| F[Defecto]
-    F --> G[Evidencia]
-    E --> H[Automatización]
-    G --> H
-```
-
----
-
-## 📊 Resultados actuales
-
-| Métrica | Resultado |
-| --- | ---: |
-| Tests de regresión | **26 Passed** |
-| Escenarios automatizados de defectos conocidos | **11** |
-| Specs de regresión | **5** |
-| Specs de defectos conocidos | **5** |
-| Bugs documentados | **12** |
-| Vulnerabilidades detectadas por npm | **0** |
-| Integración continua | **GitHub Actions** |
-| Reportes | **Mochawesome HTML** |
-
-La regresión y los defectos conocidos se ejecutan por separado:
-
-```text
-Regression Suite
-26 Passed · Bloqueante
-
-Known Defects Suite
-11 escenarios · No bloqueante
-```
-
-Esto permite diferenciar una regresión nueva de un defecto que ya está identificado y documentado.
+La cobertura se amplía progresivamente a medida que avanzan las distintas áreas funcionales del proyecto.
 
 ---
 
-## 🧠 Habilidades aplicadas
+## 3. Enfoque de testing
 
-| Área | Aplicación en el proyecto |
-| --- | --- |
-| **Manual Testing** | Exploración, diseño y ejecución de Test Cases |
-| **UI Testing** | Navegación, formularios, habitaciones, imágenes y contenido |
-| **E2E Testing** | Flujos completos desde la interfaz hasta el backend |
-| **API Testing** | Validación de status codes, responses y persistencia |
-| **Integration Testing** | Comparación entre los datos de API y la información mostrada en UI |
-| **Negative Testing** | Datos inválidos, recursos ausentes y respuestas inesperadas |
-| **Boundary Testing** | Valores mínimos, máximos y fuera de límite |
-| **Error Simulation** | Simulación controlada de respuestas HTTP 404, 409 y 500 |
-| **Responsive Testing** | Validaciones en diferentes viewports |
-| **Mobile Testing** | Flujos sobre Safari y simuladores iOS con Maestro |
-| **Regression Testing** | Suite estable ejecutada automáticamente |
-| **Bug Reporting** | Defectos reproducibles con evidencia y trazabilidad |
-| **CI/CD** | Ejecución automática con GitHub Actions |
-| **Test Reporting** | Reportes HTML mediante Mochawesome |
+No todos los escenarios se prueban de la misma forma.
 
----
-
-## 🧪 Cobertura funcional
-
-### Homepage y branding
-
-- Información pública del hotel.
-- Datos de contacto.
-- Logo e imagen principal.
-- Ubicación y mapa.
-- Consistencia entre UI y `GET /api/branding`.
-- Respuestas incompletas del servicio de branding.
-
-### Habitaciones
-
-- Visualización del catálogo.
-- Correspondencia entre UI y `GET /api/room`.
-- Identificadores únicos.
-- Información incompleta.
-- Catálogo vacío.
-- Acceso al flujo de reserva.
-- Validación de imágenes.
-
-### Formulario de contacto
-
-- Envío con datos válidos.
-- Correspondencia entre request y formulario.
-- Persistencia del mensaje en backend.
-- Campos obligatorios.
-- Formatos inválidos.
-- Valores límite.
-- Respuestas HTTP 400 y 500.
-- Feedback mostrado al usuario.
-
-### Navegación y enlaces
-
-- Navegación desde el header.
-- Navegación desde el footer.
-- Anchors y secciones internas.
-- Enlaces sociales.
-- Rutas inexistentes.
-- Comportamiento responsive.
-
----
-
-## 🧰 Herramientas
-
-| Herramienta | Uso |
-| --- | --- |
-| **Cypress** | Automatización web, E2E, API e integración |
-| **JavaScript** | Implementación de tests, utilidades y Page Objects |
-| **Maestro** | Pruebas mobile y responsive en simuladores iOS |
-| **Postman** | Exploración de APIs, validación y evidencia |
-| **Jira** | Organización de épicas, historias, casos y defectos |
-| **GitHub Actions** | Integración continua |
-| **Mochawesome** | Reportes HTML de las ejecuciones |
-| **Git / GitHub** | Control de versiones y publicación del proyecto |
-
----
-
-## 🏗️ Arquitectura de la automatización
-
-```text
-cypress/
-├── e2e/
-│   ├── public/
-│   │   └── homepage/
-│   │       ├── branding.cy.js
-│   │       ├── contact.cy.js
-│   │       ├── images.cy.js
-│   │       ├── navigation.cy.js
-│   │       └── rooms.cy.js
-│   │
-│   └── known-defects/
-│       └── homepage/
-│           ├── branding-defects.cy.js
-│           ├── contact-defects.cy.js
-│           ├── links-defects.cy.js
-│           ├── navigation-defects.cy.js
-│           └── rooms-defects.cy.js
-│
-├── fixtures/
-└── support/
-    ├── pages/
-    ├── utils/
-    ├── commands.js
-    └── e2e.js
-```
-
-La automatización utiliza:
-
-- Page Objects;
-- comandos reutilizables;
-- datos dinámicos;
-- interceptación de requests;
-- simulación de respuestas;
-- consultas API con `cy.request()`;
-- variables de entorno;
-- validaciones UI ↔ API.
-
----
-
-## ✅ Regresión y defectos conocidos
-
-### Regression Suite
-
-Contiene los escenarios estables que deben pasar.
-
-```text
-cypress/e2e/public/homepage/
-```
-
-Si uno de estos tests falla en CI, la ejecución se marca como fallida porque puede existir una regresión nueva.
-
-### Known Defects Suite
-
-Contiene escenarios que reproducen comportamientos incorrectos ya identificados.
-
-```text
-cypress/e2e/known-defects/homepage/
-```
-
-Estos tests mantienen el resultado esperado del producto. No se modifican para aceptar el comportamiento defectuoso.
-
-La suite se ejecuta en CI para:
-
-- confirmar que el defecto sigue siendo reproducible;
-- conservar evidencia automatizada;
-- detectar cuándo el comportamiento cambia;
-- evitar que los defectos conocidos bloqueen la regresión estable.
+La herramienta y el tipo de prueba se eligen según el comportamiento que se necesita validar.
 
 ```mermaid
 flowchart TD
-    A[Push o Pull Request] --> B[GitHub Actions]
-    B --> C[Regression Suite]
-    B --> D[Known Defects Suite]
+    A[Nuevo escenario] --> B{¿Qué se quiere validar?}
 
-    C -->|Passed| E[CI correcta]
-    C -->|Failed| F[Posible regresión]
+    B -->|UI / flujo web| C[Cypress]
+    B -->|API / backend| D[Postman o cy.request]
+    B -->|Mobile / Responsive| E[Maestro]
+    B -->|Validación subjetiva| F[Manual]
 
-    D --> G[Resultado informativo]
-    G --> H[Mochawesome Artifact]
+    C --> G[Automatización]
+    D --> G
+    E --> G
+    F --> H[Ejecución manual]
 ```
 
 ---
 
-## 🔌 Pruebas de API e integración
+## 4. Tipos de prueba utilizados
 
-Cypress utiliza `cy.request()` para validar directamente los servicios cuando la API forma parte del flujo automatizado.
+| Tipo | Uso |
+| --- | --- |
+| **Functional Testing** | Validar que una funcionalidad cumpla el comportamiento esperado |
+| **E2E Testing** | Validar flujos completos desde la interfaz |
+| **API Testing** | Validar status codes, responses, datos y persistencia |
+| **Integration Testing** | Comprobar correspondencia entre UI y backend |
+| **Negative Testing** | Validar datos inválidos y estados inesperados |
+| **Boundary Testing** | Validar valores mínimos, máximos y límites |
+| **Responsive Testing** | Validar comportamiento en distintos tamaños de pantalla |
+| **Mobile Testing** | Validar flujos sobre dispositivos o simuladores móviles |
+| **Regression Testing** | Reejecutar escenarios automatizados para detectar cambios no deseados |
 
-Las comprobaciones incluyen:
+---
 
-- códigos HTTP;
-- estructura de responses;
-- datos enviados desde la interfaz;
-- datos almacenados en backend;
-- IDs obtenidos dinámicamente;
-- correspondencia entre API y UI;
-- manejo de errores.
+## 5. Diseño de Test Cases
 
-Ejemplo del flujo de validación:
+Los Test Cases se diseñan a partir del comportamiento esperado de cada funcionalidad.
+
+Se busca:
+
+- evitar escenarios duplicados;
+- agrupar casos relacionados cuando sea posible;
+- separar validaciones con objetivos distintos;
+- utilizar datos claros y reproducibles;
+- mantener trazabilidad con defectos encontrados.
+
+Las técnicas de diseño se documentan únicamente cuando realmente aplican.
+
+Ejemplos utilizados en el proyecto:
+
+- **Partición de equivalencia**
+- **Análisis de valores límite**
+
+No se añade una técnica de diseño de forma automática si el escenario no la necesita.
+
+---
+
+## 6. Automatización
+
+La automatización se utiliza cuando aporta valor en:
+
+- regresión;
+- repetibilidad;
+- validaciones frecuentes;
+- flujos críticos;
+- escenarios con múltiples combinaciones;
+- comprobaciones UI ↔ API.
+
+No todos los Test Cases se automatizan.
+
+Algunas validaciones permanecen manuales cuando dependen principalmente de:
+
+- claridad visual;
+- percepción del usuario;
+- experiencia de uso;
+- interpretación subjetiva.
 
 ```mermaid
 flowchart LR
-    A[Formulario UI] --> B[POST API]
-    B --> C[Response]
-    C --> D[GET API]
-    D --> E[Validar persistencia]
-    E --> F[Comparar UI y backend]
+    A[Test Case] --> B{¿Aporta valor automatizar?}
+    B -->|Sí| C[Automation]
+    B -->|No| D[Manual]
+    C --> E[Regression]
 ```
-
-Postman se utiliza como herramienta complementaria para explorar endpoints, investigar defectos y generar evidencias.
-
-La colección Postman y su ejecución mediante Newman forman parte de próximas mejoras.
 
 ---
 
-## 🎭 Simulación de errores
+## 7. Cypress
 
-Para reproducir escenarios difíciles de generar manualmente se utilizan interceptaciones controladas.
+Cypress es la herramienta principal para automatización web.
+
+Se utiliza para:
+
+- UI Testing;
+- E2E;
+- formularios;
+- navegación;
+- pruebas negativas;
+- valores límite;
+- interceptación de requests;
+- simulación de errores;
+- validación de responses;
+- consultas API mediante `cy.request()`.
+
+La suite utiliza:
+
+- Page Objects;
+- comandos reutilizables;
+- utilidades;
+- datos dinámicos;
+- intercepts;
+- variables de entorno.
+
+---
+
+## 8. Maestro
+
+Maestro se utiliza para pruebas mobile y responsive cuando el comportamiento del dispositivo aporta valor adicional.
+
+Actualmente se usa principalmente para:
+
+- navegación mobile;
+- menús responsive;
+- validaciones sobre simuladores iOS;
+- comprobaciones en diferentes tamaños de pantalla.
+
+---
+
+## 9. API Testing
+
+Postman se utiliza como herramienta de apoyo para validar directamente los servicios de la aplicación.
+
+Se utiliza para:
+
+- ejecutar requests;
+- validar status codes;
+- revisar response bodies;
+- comprobar estructuras;
+- verificar persistencia;
+- apoyar investigaciones de bugs;
+- generar evidencias.
+
+Cypress también realiza validaciones API cuando forman parte de un flujo automatizado mediante:
+
+```javascript
+cy.request()
+```
+
+La consolidación de las requests en una colección Postman versionada y su ejecución con Newman forma parte de futuras entregas.
+
+---
+
+## 10. Datos de prueba
+
+Siempre que sea posible se utilizan datos dinámicos para reducir:
+
+- colisiones entre ejecuciones;
+- dependencia de registros anteriores;
+- IDs hardcodeados;
+- falsos positivos o negativos.
 
 Ejemplos:
 
-| Simulación | Objetivo |
-| --- | --- |
-| Branding sin objeto `map` | Validar el comportamiento ante una respuesta incompleta |
-| Catálogo de habitaciones vacío | Validar el empty state |
-| Imagen con respuesta 404 | Comprobar la estabilidad de la homepage |
-| Servicio de contacto con HTTP 500 | Validar el feedback ante errores |
-| Datos con formatos inválidos | Comprobar validaciones frontend y backend |
-
-Estas simulaciones permiten ejecutar los escenarios de forma repetible sin depender de que el error ocurra de manera natural.
-
----
-
-## 📱 Mobile y responsive
-
-Maestro complementa la automatización web cuando el comportamiento depende del dispositivo o del viewport.
-
 ```text
-maestro/
-└── flows/
-    └── navigation-responsive.yaml
+Nombre dinámico
+Email dinámico
+Subject dinámico
+IDs obtenidos desde la API
+Fechas calculadas durante la ejecución
 ```
 
-Actualmente se utiliza para validar:
-
-- apertura del menú mobile;
-- opciones disponibles;
-- navegación mediante el menú;
-- comportamiento después de seleccionar una sección;
-- visualización en simuladores iOS.
+Los identificadores creados o recuperados durante una prueba se obtienen dinámicamente cuando la aplicación lo permite.
 
 ---
 
-## 📝 Documentación QA
+## 11. Variables de entorno
 
-La documentación se mantiene dentro del repositorio para que el proyecto pueda entenderse sin acceso a herramientas externas.
+Las credenciales y datos sensibles no se almacenan directamente dentro de los tests.
 
-```text
-docs/
-├── epics/
-├── test-cases/
-├── bugs/
-├── evidence/
-└── test-strategy.md
-```
-
-| Ruta | Contenido |
-| --- | --- |
-| `docs/epics/` | Objetivo, alcance y valor de negocio |
-| `docs/test-cases/` | Casos, criterios de aceptación y resultados |
-| `docs/bugs/` | Defectos encontrados |
-| `docs/evidence/` | Capturas asociadas a defectos |
-| [`docs/test-strategy.md`](docs/test-strategy.md) | Estrategia general del proyecto |
-
-La trazabilidad utilizada es:
-
-```mermaid
-flowchart LR
-    A[Epic] --> B[User Story]
-    B --> C[Acceptance Criteria]
-    C --> D[Test Case]
-    D --> E{Resultado}
-    E -->|Passed| F[Regression]
-    E -->|Failed| G[Bug]
-    G --> H[Evidence]
-```
-
----
-
-## 🐞 Bug reporting
-
-Los defectos documentados incluyen:
-
-- descripción;
-- trazabilidad;
-- precondiciones;
-- datos de prueba;
-- pasos para reproducir;
-- resultado actual;
-- resultado esperado;
-- severidad y prioridad;
-- entorno;
-- evidencias;
-- recomendación.
-
-Ejemplos:
-
-- [`SMB-110 — Missing branding object`](docs/bugs/SMB-1/SMB-110-missing-branding-object.md)
-- [`SMB-134 — Empty room state`](docs/bugs/SMB-1/SMB-134-empty-room-state.md)
-- [`SMB-42 — Contact form accepts invalid data`](docs/bugs/SMB-2/SMB-42-contact-form-accepts-invalid-data.md)
-- [`SMB-155 — Contact form without error feedback`](docs/bugs/SMB-2/SMB-155-contact-form-no-error-feedback.md)
-
----
-
-## 🚀 Instalación
-
-### Requisitos
-
-- Node.js
-- npm
-- Git
-- Chrome
-
-### Clonar el repositorio
-
-```bash
-git clone https://github.com/MichaelR21z/shady-meadows-bnb-automation.git
-cd shady-meadows-bnb-automation
-```
-
-### Instalar dependencias
-
-```bash
-npm ci
-```
-
----
-
-## 🧪 Ejecutar las pruebas
-
-### Regresión estable
-
-```bash
-npm test
-```
-
-También puede ejecutarse mediante:
-
-```bash
-npm run test:regression
-```
-
-### Defectos conocidos
-
-```bash
-npm run test:defects
-```
-
-Esta suite contiene escenarios que pueden fallar de forma esperada mientras los defectos continúen abiertos.
-
----
-
-## 📊 Reportes
-
-Cada ejecución genera un reporte HTML con Mochawesome:
-
-```text
-cypress/reports/index.html
-```
-
-Para abrir el último reporte en macOS:
-
-```bash
-npm run report:open
-```
-
-El reporte incluye:
-
-- tests ejecutados;
-- Passed y Failed;
-- duración;
-- suites;
-- errores;
-- screenshots asociados a fallos.
-
-Los reportes y screenshots son temporales y no se almacenan en Git.
-
-En GitHub Actions se generan dos artifacts independientes:
-
-```text
-regression-mochawesome-report
-known-defects-mochawesome-report
-```
-
-Los artifacts se conservan durante dos días.
-
----
-
-## ⚙️ Integración continua
-
-GitHub Actions ejecuta automáticamente las pruebas después de:
-
-- un `push` a `main`;
-- un Pull Request hacia `main`;
-- una ejecución manual.
-
-El workflow contiene dos jobs:
-
-| Job | Comportamiento |
-| --- | --- |
-| **Public Homepage Regression** | Bloqueante |
-| **Known Defects** | Informativo y no bloqueante |
-
-De esta manera, CI puede detectar regresiones nuevas sin perder visibilidad sobre los defectos que ya están documentados.
-
----
-
-## 🔐 Variables de entorno
-
-Las credenciales no se almacenan directamente en los tests.
-
-Para desarrollo local se utiliza:
+Localmente se utiliza:
 
 ```text
 cypress.env.json
 ```
 
-Este archivo está excluido mediante `.gitignore`.
+Este archivo está excluido del repositorio mediante `.gitignore`.
 
 El repositorio incluye:
 
@@ -480,68 +227,156 @@ El repositorio incluye:
 cypress.env.example.json
 ```
 
-como referencia.
+como referencia de configuración.
 
-Las variables sensibles se obtienen mediante `cy.env()`:
+En GitHub Actions las credenciales se almacenan mediante **Repository Secrets**.
 
-```javascript
-cy.env(['adminUsername', 'adminPassword']).then(
-    ({ adminUsername, adminPassword }) => {
-        // Use credentials securely.
-    }
-)
+```mermaid
+flowchart LR
+    A[Local] --> B[cypress.env.json]
+    C[GitHub Actions] --> D[Repository Secrets]
+    B --> E[cy.env]
+    D --> E
 ```
 
-En GitHub Actions se utilizan Repository Secrets.
+---
+
+## 12. Gestión de defectos
+
+Cuando un Test Case no cumple el resultado esperado:
+
+```text
+Test Case
+   ↓
+Failed
+   ↓
+Bug
+   ↓
+Evidence
+```
+
+Cada bug documentado incluye información suficiente para reproducir y comprender el defecto.
+
+Las evidencias permanentes se almacenan en:
+
+```text
+docs/evidence/
+```
+
+Las grabaciones de mayor tamaño pueden mantenerse externamente y enlazarse desde el bug correspondiente.
 
 ---
 
-## 🗺️ Estado del proyecto
+## 13. Bugs conocidos y automatización
 
-El proyecto se desarrolla progresivamente mediante áreas funcionales identificadas con `SMB-*`.
+Un test automatizado puede permanecer en estado **Failed** cuando reproduce un bug conocido.
 
-### Cobertura funcional
+La prueba sigue validando el comportamiento esperado y no se modifica para aceptar un comportamiento defectuoso.
 
-| Área | Funcionalidades incluidas | Estado |
+Esto permite detectar cuándo el bug deja de reproducirse.
+
+Los bugs conocidos no se consideran automáticamente errores de la automatización.
+
+---
+
+## 14. Continuous Integration
+
+GitHub Actions ejecuta automáticamente Cypress después de:
+
+- `push` a `main`;
+- Pull Requests hacia `main`;
+- ejecución manual del workflow.
+
+Actualmente CI está limitado a:
+
+```text
+cypress/e2e/public/homepage/
+```
+
+porque otras áreas del proyecto siguen en desarrollo.
+
+```mermaid
+flowchart LR
+    A[Push / PR] --> B[GitHub Actions]
+    B --> C[Cypress]
+    C --> D[Public Homepage]
+    D --> E[Mochawesome]
+    E --> F[HTML Report]
+```
+
+La cobertura de CI se ampliará progresivamente a Booking, Admin y futuras áreas a medida que se complete su implementación.
+
+---
+
+## 15. Reporting
+
+Las ejecuciones Cypress generan reportes mediante **Mochawesome**.
+
+El reporte incluye:
+
+- tests ejecutados;
+- Passed;
+- Failed;
+- duración;
+- suites;
+- errores;
+- screenshots generados durante fallos.
+
+Localmente:
+
+```text
+cypress/reports/index.html
+```
+
+Antes de cada nueva ejecución se eliminan los reportes y screenshots anteriores.
+
+En GitHub Actions el reporte se guarda como un artifact temporal durante **2 días**.
+
+Los reportes no se versionan en el repositorio.
+
+---
+
+## 16. Evidencia vs reporte de automatización
+
+La evidencia de bugs y los reportes de Cypress tienen objetivos diferentes.
+
+| Elemento | Objetivo | Permanencia |
 | --- | --- | --- |
-| **SMB-1** | Homepage pública, branding, navegación, catálogo de habitaciones, imágenes, enlaces y responsive | ✅ Desarrollado |
-| **SMB-2** | Formulario de contacto, validaciones, valores límite, persistencia y manejo de errores | ✅ Desarrollado |
-| **SMB-3** | Disponibilidad, fechas y flujo de reservas | 🚧 En desarrollo |
-| **SMB-4** | Login, sesiones, logout, tokens y rutas administrativas protegidas | 🚧 En desarrollo |
-| **SMB-8** | Reportes administrativos y ocupación | ⏳ Próxima entrega |
-
-### Capacidades del proyecto QA
-
-| Capacidad | Estado |
-| --- | --- |
-| Regresión automatizada | ✅ Desarrollada |
-| Defectos conocidos separados | ✅ Desarrollados |
-| Validaciones UI ↔ API | ✅ Desarrolladas |
-| Simulación de errores HTTP | ✅ Desarrollada |
-| Pruebas mobile con Maestro | ✅ Desarrolladas |
-| CI con ejecuciones separadas | ✅ Desarrollada |
-| Reportes Mochawesome independientes | ✅ Desarrollados |
-| Accesibilidad automatizada | 🧪 En investigación |
-| Colección Postman y Newman | ⏳ Próxima mejora |
+| `docs/evidence/` | Evidencia oficial del defecto | Permanente |
+| Mochawesome local | Resultado de la última ejecución | Temporal |
+| Mochawesome CI | Resultado de ejecución automática | 2 días |
+| Cypress screenshots | Apoyo para debugging | Temporal |
 
 ---
 
-## 👨‍💻 Autor
+## 17. Criterios generales de calidad
 
-**Michael Romero**  
-QA Tester · ISTQB® Certified Tester Foundation Level
+Durante el proyecto se busca:
 
-💼 [LinkedIn](https://www.linkedin.com/in/michaelsromero/)  
-📧 [Michaelromevi@gmail.com](mailto:Michaelromevi@gmail.com)
+- mantener tests independientes;
+- evitar duplicación;
+- evitar datos hardcodeados;
+- utilizar selectores estables cuando sea posible;
+- mantener documentación y automatización alineadas;
+- separar pruebas manuales y automatizadas;
+- documentar defectos reproducibles;
+- mantener trazabilidad;
+- automatizar solo cuando aporta valor;
+- ampliar regresión progresivamente.
 
 ---
 
-<div align="center">
+## 18. Estado de la estrategia
 
-### Shady Meadows B&B QA Portfolio
+> 🚧 **Proyecto en curso**
 
-**Manual · Web · Mobile · API · E2E · Cypress · Maestro · CI/CD**
+La estrategia evoluciona junto con el proyecto.
 
-🚧 Proyecto en desarrollo continuo
+Próximas mejoras previstas:
 
-</div>
+- ampliar cobertura de Booking;
+- incorporar Admin a CI;
+- consolidar colección Postman;
+- ejecutar APIs con Newman;
+- ampliar la suite de regresión;
+- revisar y ajustar la estrategia según crezca el repositorio.
