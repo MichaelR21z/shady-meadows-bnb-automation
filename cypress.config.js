@@ -17,6 +17,18 @@ module.exports = defineConfig({
     baseUrl: "https://automationintesting.online",
 
     setupNodeEvents(on, config) {
+      on('task', {
+        log(message) {
+          console.log(message)
+          return null
+        },
+
+        table(rows) {
+          console.table(rows)
+          return null
+        }
+      })
+      
       require('cypress-mochawesome-reporter/plugin')(on)
       return config
     }

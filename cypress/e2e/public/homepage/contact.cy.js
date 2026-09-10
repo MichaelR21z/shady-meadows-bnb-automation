@@ -51,7 +51,7 @@ describe('Public Contact Form', () => {
         homePage.getContactSection().should('be.visible')
     })
 
-    it.only('TC59 - Verificar persistencia y correspondencia del mensaje enviado entre UI y backend', () => {
+    it('TC59 - Verificar persistencia y correspondencia del mensaje enviado entre UI y backend', () => {
 
         const contactData = generateContactData('Persistence test')
 
@@ -113,37 +113,6 @@ describe('Public Contact Form', () => {
         })
     })
 
-    // Related defect: SMB-155 - contact form no error feedback
-    // The contact form does not display any error message when the message service returns an error.
-    it('TC60 - Verificar comportamiento del formulario de contacto ante un error del servicio', () => {
-
-        const contactData = generateContactData('Service error test')
-
-        cy.intercept('POST', '**/api/message', {
-            statusCode: 500,
-            body: {
-                error: 'Internal Server Error'
-            }
-        }).as('MessageError')
-
-        cy.visit('/')
-
-        // Complete and submit the contact form using the generated data
-        homePage.fillContactForm(contactData)
-        homePage.submitContactForm()
-
-        // Verify that the simulated backend response returns HTTP 500.
-        cy.wait('@MessageError').its('response.statusCode').should('eq', 500)
-
-        // Verify that a successful submission message is not displayed.
-        cy.get('#contact').should('not.contain.text', 'Thanks for getting in touch')
-
-        // Verify that the Contact section remains available after the failed request.
-        homePage.getContactSection().scrollIntoView().should('be.visible')
-
-        cy.get('body').should('be.visible')
-    })
-
     it('TC61 - Verificar validación de campos obligatorios del formulario de contacto', () => {
 
         // Capture the validation response returned when submitting an empty form.
@@ -175,51 +144,6 @@ describe('Public Contact Form', () => {
         homePage.getContactSection()
             .should('be.visible')
     })
-
-    const invalidFormatCases = [
-        {
-            field: 'email',
-            value: 'jh@h'
-        },
-        {
-            field: 'phone',
-            value: 'asdfghjklñzxcvbnm'
-        }
-    ]
-
-    invalidFormatCases.forEach((invalidCase) => {
-
-        // Related defect: SMB-42 - Contact form accepts invalid data
-        it(`TC62 - Verificar rechazo de formato inválido en ${invalidCase.field} [SMB-42]`, () => {
-
-            const contactData = generateContactData('Invalid format test')
-
-            // Replace only the field under validation with an invalid value.
-            contactData[invalidCase.field] = invalidCase.value
-
-            // Capture any message creation request triggered by the invalid form.
-            cy.intercept('POST', '**/api/message').as('createMessage')
-
-
-            cy.visit('/')
-
-            // Fill the form with valid data except for the field being validated.
-            homePage.fillContactForm(contactData)
-            homePage.submitContactForm()
-
-            // Wait for the request incorrectly triggered with invalid data.
-            cy.wait('@createMessage')
-
-            // Verify that invalid input does not produce a successful submission.
-            homePage.getContactSection()
-                .should('not.contain.text', 'Thanks for getting in touch')
-
-            // Verify that the Contact section remains available after validation.
-            homePage.getContactSection()
-                .should('be.visible')
-        })
-    })
-
 
     // Define the boundary scenarios for each field and the expected submission behavior.
     // shouldSubmit indicates whether each value should be accepted and submitted.

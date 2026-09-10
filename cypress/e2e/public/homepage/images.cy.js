@@ -71,41 +71,46 @@ describe('Public Image Resources', () => {
             }
         })
 
-        // Verify every collected image resource.
+        // Verify every image resource hosted by the application.
         cy.then(() => {
+            const applicationUrl = new URL(Cypress.config('baseUrl'))
 
-            // Create a new array where all image URLs use the same absolute format
-            // allowing duplicate resources from different sources to be identified correctly
-            const normalizedImageUrls = imageUrls.map((imageUrl) => {
+            // Convert relative URLs to absolute URLs.
+            const applicationImageUrls = imageUrls
+                .map((imageUrl) => new URL(imageUrl, applicationUrl))
 
-                return new URL(imageUrl, Cypress.config('baseUrl')).href
+                // Exclude external images that are not controlled by the application.
+                .filter((imageUrl) => {
+                    return (
+                        imageUrl.origin === applicationUrl.origin &&
+                        imageUrl.pathname.startsWith('/images/')
+                    )
+                })
 
-            })
+                // Keep only the final URL value.
+                .map((imageUrl) => imageUrl.href)
 
-            // Remove duplicated URLs to avoid requesting the same image more than once
-            const uniqueImageUrls = [...new Set(normalizedImageUrls)]
+            // Remove duplicated image URLs.
+            const uniqueImageUrls = [...new Set(applicationImageUrls)]
 
+            // Verify that at least one application image was found.
             expect(uniqueImageUrls.length).to.be.greaterThan(0)
 
-            // Send an HTTP request to every unique image resource found
             uniqueImageUrls.forEach((imageUrl) => {
-
+                
+                // Request each image without stopping automatically on an HTTP error.
                 cy.request({
                     method: 'GET',
                     url: imageUrl,
-
-                    // Allow Cypress to receive 4xx/5xx responses so the test
-                    // can report which image resource failed
                     failOnStatusCode: false
                 }).then((response) => {
-
-                    // Verify that each image resource returns HTTP status 200
-                    expect(response.status,
+                    // Verify that the image resource is available.
+                    expect(
+                        response.status,
                         `Image request failed: ${imageUrl}`
                     ).to.eq(200)
 
-                    // Confirm that the response is actually an image
-                    // and not HTML, JSON or another resource type
+                    // Verify that the response contains an image.
                     expect(
                         response.headers['content-type'],
                         `Invalid image content type: ${imageUrl}`

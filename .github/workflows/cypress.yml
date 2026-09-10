@@ -4,34 +4,61 @@ on:
   push:
     branches:
       - main
+
   pull_request:
     branches:
       - main
+
   workflow_dispatch:
 
 jobs:
-  cypress-run:
+  regression-tests:
+    name: Public Homepage Regression
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
 
-      - name: Run Cypress public homepage tests
+      - name: Run Cypress regression tests
         uses: cypress-io/github-action@v7
         with:
           browser: chrome
-          spec: cypress/e2e/public/homepage/**/*.cy.js
+          spec: "cypress/e2e/public/homepage/**/*.cy.js"
 
         env:
           CYPRESS_adminUsername: ${{ secrets.CYPRESS_ADMIN_USERNAME }}
           CYPRESS_adminPassword: ${{ secrets.CYPRESS_ADMIN_PASSWORD }}
 
-      - name: Upload Mochawesome report
+      - name: Upload regression report
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: mochawesome-report
+          name: regression-mochawesome-report
+          path: cypress/reports
+          if-no-files-found: ignore
+          retention-days: 2
+
+  known-defects:
+    name: Known Defects
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Run known defect tests
+        continue-on-error: true
+        uses: cypress-io/github-action@v7
+        with:
+          browser: chrome
+          spec: "cypress/e2e/known-defects/homepage/**/*.cy.js"
+
+      - name: Upload known defects report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: known-defects-mochawesome-report
           path: cypress/reports
           if-no-files-found: ignore
           retention-days: 2
