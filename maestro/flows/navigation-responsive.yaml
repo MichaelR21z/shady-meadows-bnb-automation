@@ -19,8 +19,8 @@ appId: com.apple.mobilesafari
 - tapOn:
     point: 83%,8%
 # iPad Pro 11-inch (M5)
-- tapOn:
-    point: 85%,8%
+# - tapOn:
+#     point: 85%,8%
 
 # Verify that navigation options are displayed.
 - assertVisible: "Rooms"

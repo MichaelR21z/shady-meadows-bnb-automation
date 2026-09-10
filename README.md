@@ -370,7 +370,7 @@ Este segundo comando es útil mientras se trabaja sobre la cobertura pública ac
 Al ejecutar Cypress se genera automáticamente:
 
 ```text
-cypress/reports/html/index.html
+ccypress/reports/index.html
 ```
 
 Para abrir el último reporte en macOS:

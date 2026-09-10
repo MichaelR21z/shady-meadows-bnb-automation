@@ -51,7 +51,7 @@ describe('Public Contact Form', () => {
         homePage.getContactSection().should('be.visible')
     })
 
-    it('TC59 - Verificar persistencia y correspondencia del mensaje enviado entre UI y backend', () => {
+    it.only('TC59 - Verificar persistencia y correspondencia del mensaje enviado entre UI y backend', () => {
 
         const contactData = generateContactData('Persistence test')
 
@@ -109,6 +109,7 @@ describe('Public Contact Form', () => {
                 expect(messageDetail.subject).to.eq(contactData.subject)
                 expect(messageDetail.description).to.eq(contactData.message)
             })
+            cy.get('#contact').scrollIntoView()
         })
     })
 

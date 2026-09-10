@@ -325,7 +325,7 @@ El reporte incluye:
 Localmente:
 
 ```text
-cypress/reports/html/index.html
+cypress/reports/index.html
 ```
 
 Antes de cada nueva ejecución se eliminan los reportes y screenshots anteriores.

@@ -5,3 +5,6 @@ cypress/reports
 cypress.env.json
 .env
 .DS_Store
+# Suites todavía en desarrollo
+cypress/e2e/booking/
+cypress/e2e/admin/

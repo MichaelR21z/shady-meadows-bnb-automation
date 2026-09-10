@@ -3,7 +3,7 @@
     "clean:reports": "rm -rf cypress/reports cypress/screenshots",
     "test": "npm run clean:reports && cypress run",
     "test:public": "npm run clean:reports && cypress run --spec \"cypress/e2e/public/homepage/**/*.cy.js\"",
-    "report:open": "open cypress/reports/html/index.html"
+    "report:open": "open cypress/reports/index.html"
   },
   "devDependencies": {
     "cypress": "^15.21.1",
